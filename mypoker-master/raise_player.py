@@ -1,4 +1,5 @@
 from pypokerengine.players import BasePokerPlayer
+from randomplayer import RandomPlayer
 from time import sleep
 import pprint
 import collections
@@ -11,17 +12,13 @@ class RaisedPlayer(BasePokerPlayer):
 
   # round_state
     pp = pprint.PrettyPrinter(indent=2)
-    print "------------------------VALID ACTIONS----------------------------------"
+    print("------------------------VALID ACTIONS----------------------------------")
     pp.pprint(valid_actions)
     flag = True
     current_round = round_state['action_histories'][round_state['street']]
     uuid1 = round_state['seats'][0]['uuid']
     uuid2 = round_state['seats'][1]['uuid']
-
-  # (current_round)
     raiseCount = collections.defaultdict(int)
-
-
 
     for action_details in current_round:
         if action_details['action'] is 'RAISE' or 'BIGBLIND':

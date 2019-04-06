@@ -5,13 +5,17 @@ from feature_strength_offline import FeatureStrengthOffline
 import pprint
 
 #TODO:config the config as our wish
-config = setup_config(max_round=10, initial_stack=10000, small_blind_amount=10)
+config = setup_config(max_round=50000, initial_stack=10000, small_blind_amount=10)
 
 feature_strength_train = FeatureStrengthOffline()
 
 config.register_player(name="f1", algorithm=RandomPlayer())
 config.register_player(name="FT2", algorithm=TrainedPlayer(feature_strength_train))
 
-game_result = start_poker(config, verbose=1)
+game_result = start_poker(config, verbose=0)
 pp = pprint.PrettyPrinter(indent=2)
-pp.pprint(game_result)
+pp.pprint("------------------GAME RESULT--------------------------")
+# pp.pprint(game_result)
+feature_strength_train.feed_self_feature_prob_map()
+print(feature_strength_train.output_feature_map())
+print(feature_strength_train.output_weight_suggest())

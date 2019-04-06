@@ -1,4 +1,5 @@
 from pypokerengine.players import BasePokerPlayer
+from randomplayer import RandomPlayer
 from time import sleep
 import pprint
 import collections
@@ -14,8 +15,8 @@ class TrainedPlayer(BasePokerPlayer):
 
   # round_state
     pp = pprint.PrettyPrinter(indent=2)
-    print "------------------------VALID ACTIONS----------------------------------"
-    pp.pprint(valid_actions)
+   # print("------------------------VALID ACTIONS----------------------------------")
+   # pp.pprint(valid_actions)
     flag = True
     current_round = round_state['action_histories'][round_state['street']]
     uuid1 = round_state['seats'][0]['uuid']
@@ -24,30 +25,24 @@ class TrainedPlayer(BasePokerPlayer):
   # (current_round)
     raiseCount = collections.defaultdict(int)
 
-
-
     for action_details in current_round:
         if action_details['action'] is 'RAISE' or 'BIGBLIND':
             # Big blind is also considered as 'RAISE'
             raiseCount[action_details['uuid']] += 1
 
+    if raiseCount[uuid2] == 1:
+        community_card = round_state['community_card']
+        self.featureStrengthOffline.raw_feed(hole_card, community_card, len(community_card))
+
+
     if raiseCount[uuid1] >= 4 or raiseCount[uuid2] >= 4:
         flag = False
 
-    pp.pprint("ROUND STATE")
-    pp.pprint(round_state)
-
-    # get community card
-    community_card = round_state['community_card']
-    # step represents the number of community cards
-    steps = len(community_card)
-  #  if steps is 5:
-
-    self.featureStrengthOffline.get_step_feature_vector(hole_card, community_card, steps, 0);
-
+   # pp.pprint("ROUND STATE")
+   # pp.pprint(round_state)
 
     for i in valid_actions:
-        if i["action"] == "raise" :
+        if i["action"] == "raise":
             action = i["action"]
             return action  # action returned here is sent to the poker engine
     action = valid_actions[1]["action"]
@@ -66,6 +61,11 @@ class TrainedPlayer(BasePokerPlayer):
     pass
 
   def receive_round_result_message(self, winners, hand_info, round_state):
+   # pp = pprint.PrettyPrinter(indent=2)
+   # print("------------------------WINNERS----------------------------------")
+   # pp.pprint(winners)
+    result = 1 if winners[0]['name'] is "FT2" else 0
+    self.featureStrengthOffline.feed_result(result)
 
     pass
 
