@@ -1,0 +1,6 @@
+*.pyc
+.idea/
+.idea/misc.xml
+.idea/workspace.xml
+.idea/vcs.xml
+./idea/libraries/R_User_Library.xml
