@@ -4,7 +4,10 @@ import pprint
 import collections
 from feature_strength_offline import FeatureStrengthOffline
 
-class RaisedPlayer(BasePokerPlayer):
+class TrainedPlayer(BasePokerPlayer):
+
+  def __init__(self, featureStrengthOffline):
+      self.featureStrengthOffline = featureStrengthOffline
 
   def declare_action(self, valid_actions, hole_card, round_state):
     # check if raise 4 times alr, cannot raise any more
@@ -36,8 +39,11 @@ class RaisedPlayer(BasePokerPlayer):
 
     # get community card
     community_card = round_state['community_card']
-    # step represents the number of steps
+    # step represents the number of community cards
+    steps = len(community_card)
+  #  if steps is 5:
 
+    self.featureStrengthOffline.get_step_feature_vector(hole_card, community_card, steps, 0);
 
 
     for i in valid_actions:
@@ -60,6 +66,7 @@ class RaisedPlayer(BasePokerPlayer):
     pass
 
   def receive_round_result_message(self, winners, hand_info, round_state):
+
     pass
 
 def setup_ai():
