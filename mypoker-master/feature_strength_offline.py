@@ -94,6 +94,6 @@ class FeatureStrengthOffline:
 
     @staticmethod
     def compare_predict(predict, result):
-        return result if predict > 0.5 else (1 - result)
+        return result if predict > 0.5 else 0
 
 
