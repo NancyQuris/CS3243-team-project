@@ -1,7 +1,7 @@
 class ComputeHandStrength:
 
     # function that evaluate hand can be found from pypokerengine<engine<hand_evaluator
-    #priority: highcard, pair, twopair, three of a kind, straight, flush, full house, four
+    # priority: highcard, pair, twopair, three of a kind, straight, flush, full house, four
     # of a kind, straight flush, royal flush
 
     @staticmethod

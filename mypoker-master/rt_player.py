@@ -16,6 +16,7 @@ class RTPlayer(BasePokerPlayer):
   def __init__(self):
     super(BasePokerPlayer, self).__init__()
     ## printer used for debug purpose
+    self.cfvc = CardFeatureVectorCompute()
     self.pp = pprint.PrettyPrinter(indent=2)
 
     ## basic records
@@ -37,7 +38,8 @@ class RTPlayer(BasePokerPlayer):
     # nParams is the num of attributes in a feature vector
     # theta is the weight vector that needs updated
     self.nParams = 6
-    self.theta = np.random.rand(self.nParams)
+    #TODO; better way to initialize the theta?
+    self.theta = np.array([1, 0, 0, 0, 0, 0])
 
     # Input:
     #   theta: parameter for current model Qhat
@@ -65,9 +67,9 @@ class RTPlayer(BasePokerPlayer):
         flag = False
 
     # calculate card strength
-    cfvc = CardFeatureVectorCompute()
+
     thf = Trained_hand_feature()
-    card_feature = cfvc.fetch_feature(Card_util.gen_cards(hole_card), Card_util.gen_cards(round_state['community_card']))
+    card_feature = self.cfvc.fetch_feature(Card_util.gen_cards(hole_card), Card_util.gen_cards(round_state['community_card']))
     card_strength = np.dot(card_feature, thf.get_strength(self.street_map[round_state['street']]))
 
     # def act(self, theta, card_strength, isMe, my_stack, opponent_stack, curr_action, epsilon):
@@ -103,6 +105,9 @@ class RTPlayer(BasePokerPlayer):
             remain_actions.append(act['action'])
     assert len(remain_actions) in [1, 2]
 
+    if if np.random.rand() < self.epsilon(round_state['round_count'])/2
+
+    '''
     if np.random.rand() < self.epsilon(round_state['round_count'])/2 \
         or (flag is False and next_action is 'raise') \
         or (len(valid_actions) is 2 and next_action is 'raise'):
@@ -120,6 +125,7 @@ class RTPlayer(BasePokerPlayer):
                 next_action = remain_actions[0]
             else:
                 next_action = remain_actions[1]
+    '''
 
     # next_action is finalised, store the 'q' and 'phi'
     if next_action is 'raise':
@@ -279,6 +285,10 @@ class RTPlayer(BasePokerPlayer):
     # To do this, we can have the players act randomly some fraction epsilon of the time, otherwise use their (current-estimated) best options.
     # epsilon will shrink over time
   def epsilon(self, curr_round):
+    '''
+    base = 0.1
+
+    '''
     return (self.max_round - curr_round) / self.max_round
 
 def setup_ai():

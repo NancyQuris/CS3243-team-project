@@ -5,9 +5,10 @@ class CardFeatureCompute:
         print(hole)
         cards = hole + community
         assert(len(hole) == 2)
-        feature_dict += self.value_count(cards)
-        feature_dict += self.suit_count(cards)
-        feature_dict += self.seq_count(cards)
+        feature_dict = self.hole_eval(cards)
+        feature_dict.update(self.value_count(cards))
+        feature_dict.update(self.suit_count(cards))
+        feature_dict.update(self.seq_count(cards))
         return feature_dict
 
     def hole_eval(self, cards):
