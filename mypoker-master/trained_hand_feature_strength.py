@@ -20,4 +20,4 @@ class Trained_hand_feature():
     streets = [street_1, street_2, street_3, street_4]
 
     def get_strength(self, street):
-        return self.streets[street];
+        return self.streets[street]
