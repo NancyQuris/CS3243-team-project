@@ -13,6 +13,7 @@ class RTPlayer(BasePokerPlayer):
   def __init__(self):
     super(BasePokerPlayer, self).__init__()
     ## printer used for debug purpose
+    self.cfvc = CardFeatureVectorCompute()
     self.pp = pprint.PrettyPrinter(indent=2)
 
     ## basic records
@@ -34,7 +35,8 @@ class RTPlayer(BasePokerPlayer):
     # nParams is the num of attributes in a feature vector
     # theta is the weight vector that needs updated
     self.nParams = 6
-    self.theta = np.random.rand(self.nParams)
+    #TODO; better way to initialize the theta?
+    self.theta = np.array([1, 0, 0, 0, 0, 0])
 
     # Input:
     #   theta: parameter for current model Qhat
@@ -62,9 +64,9 @@ class RTPlayer(BasePokerPlayer):
         flag = False
 
     # calculate card strength
-    cfvc = CardFeatureVectorCompute()
+
     thf = Trained_hand_feature()
-    card_feature = cfvc.fetch_feature(Card_util.gen_cards(hole_card), Card_util.gen_cards(round_state['community_card']))
+    card_feature = self.cfvc.fetch_feature(Card_util.gen_cards(hole_card), Card_util.gen_cards(round_state['community_card']))
     card_strength = np.dot(card_feature, thf.get_strength(self.street_map[round_state['street']]))
 
     # def act(self, theta, card_strength, isMe, my_stack, opponent_stack, curr_action, epsilon):
@@ -276,6 +278,11 @@ class RTPlayer(BasePokerPlayer):
     # To do this, we can have the players act randomly some fraction epsilon of the time, otherwise use their (current-estimated) best options.
     # epsilon will shrink over time
   def epsilon(self, curr_round):
+    '''
+    base = 0.1
+    fraction = (self.max_round - curr_round) / float(self.max_round
+    return math.exp(-)
+    '''
     return (self.max_round - curr_round) / self.max_round
 
 def setup_ai():
