@@ -41,7 +41,7 @@ class TrainedPlayer(BasePokerPlayer):
     pass
 
   def receive_round_result_message(self, winners, hand_info, round_state):
-    self.pp.pprint(round_state)
+    #self.pp.pprint(round_state)
     #self.pp.pprint(winners)
     # self.pp.pprint(hand_info)
     # check result and determine who is the winner
