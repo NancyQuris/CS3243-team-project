@@ -18,7 +18,6 @@ class FeatureStrengthOffline:
         self.feature_num = self.cfc.feature_num
         self.step_num = 4
         self.feature_prediction_map = np.zeros([self.step_num, self.feature_num])
-        self.feature_prediction_map_size = np.zeros(self.step_num)
         # consists of 2 elements: 1. a list of 4 step vectors 2. round result [0/1]
         self.info_list = []
         # consists of 4 step vectors
