@@ -2,9 +2,9 @@ class CardFeatureCompute:
     feature_num = 18
 
     def fetch_feature(self, hole, community):
+        print(hole)
         cards = hole + community
         assert(len(hole) == 2)
-        feature_dict = self.hole_eval(hole)
         feature_dict += self.value_count(cards)
         feature_dict += self.suit_count(cards)
         feature_dict += self.seq_count(cards)

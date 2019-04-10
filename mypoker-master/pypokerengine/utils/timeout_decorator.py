@@ -118,7 +118,7 @@ def timeout2(seconds=None, defaultretval="Blah",exception_message="[EXP]: Action
                 signal.setitimer(signal.ITIMER_REAL, new_seconds)
             try:
                 return function(*args, **kwargs)
-            except TimeoutError :
+            except TimeoutError:
                 print(exception_message)
                 return defaultretval
             finally:
