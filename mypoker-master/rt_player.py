@@ -3,10 +3,7 @@ from randomplayer import RandomPlayer
 import numpy as np
 from trained_hand_feature_strength import Trained_hand_feature
 from card_feature_vector import CardFeatureVectorCompute
-from pypokerengine.engine.card import Card
 import pypokerengine.utils.card_utils as Card_util
-from pypokerengine.utils import card_utils
-from simulate_rounds import Simulation
 import pprint
 import collections
 
@@ -106,7 +103,7 @@ class RTPlayer(BasePokerPlayer):
     if np.random.rand() < self.epsilon(round_state['round_count'])/2 \
         or (flag is False and next_action is 'raise') \
         or (len(valid_actions) is 2 and next_action is 'raise'):
-        # Condition fro determining whether the next action should be randomly chosen
+        # Condition for determining whether the next action should be randomly chosen
         # 1. random_number < epsilon/2
         # 2. next_action is 'raise' but raise num alr 4, cannot raise anymore
         # 3. next_action not in valid_action (there are only two kind of valid_action set: with/withou 'raise')
@@ -231,7 +228,7 @@ class RTPlayer(BasePokerPlayer):
   def isMe(self, uuid):
       return uuid is self.uuid
 
-  # 杨斯涵将会解释此function是干啥的，我编不出来了
+  #
   def sigmoid(self, my_stack, opponent_stack):
       if my_stack > opponent_stack:
           return my_stack/opponent_stack - 1
