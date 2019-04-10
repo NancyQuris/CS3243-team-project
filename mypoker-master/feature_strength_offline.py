@@ -18,6 +18,7 @@ class FeatureStrengthOffline:
         self.feature_num = self.cfc.feature_num
         self.step_num = 4
         self.feature_prediction_map = np.zeros([self.step_num, self.feature_num])
+        self.feature_frequency_map = np.zeros([self.step_num, self.feature_num])
         # consists of 2 elements: 1. a list of 4 step vectors 2. round result [0/1]
         self.info_list = []
         # consists of 4 step vectors
@@ -61,9 +62,10 @@ class FeatureStrengthOffline:
             self.feed_step_feature_prob_map(feature_vector_list[i], result, i)
 
     def feed_step_feature_prob_map(self, feature_vector, result, step):
-        vfunc = np.vectorize(self.compare_predict)
-        self.feature_prediction_map[step] = np.add(self.feature_prediction_map[step], vfunc(feature_vector, result))
-        self.feature_prediction_map_size[step] += 1
+        vfunc_f = np.vectorize(self.check_if_present)
+        vfunc_p = np.vectorize(self.compare_predict)
+        self.feature_frequency_map[step] = np.add(self.feature_frequency_map[step], vfunc_f(feature_vector))
+        self.feature_prediction_map[step] = np.add(self.feature_prediction_map[step], vfunc_p(feature_vector, result))
 
     def feed_self_feature_prob_map(self):
         self.feed_bunch_feature_prob_map(self.info_list)
@@ -71,12 +73,10 @@ class FeatureStrengthOffline:
     def output_feature_map(self):
         final_feature_map = []
         for i in range(self.step_num):
-            sample_size = self.feature_prediction_map_size[i]
-            if sample_size == 0:
-                final_feature_map.append(np.zeros(self.feature_num))
-            else:
-                normalised = np.true_divide(self.feature_prediction_map[i], sample_size)
-                final_feature_map.append(normalised)
+            f = self.feature_frequency_map[i]
+            p = self.feature_prediction_map[i]
+            feature_step_map = np.true_divide(p, f, out=np.zeros_like(p), where=f != 0)
+            final_feature_map.append(feature_step_map)
         return final_feature_map
 
     def output_weight_suggest(self):
@@ -90,6 +90,10 @@ class FeatureStrengthOffline:
                 normalised = np.true_divide(v, sum)
                 final_weight_suggest.append(normalised)
         return final_weight_suggest
+
+    @staticmethod
+    def check_if_present(predict):
+        return predict > 0.5
 
     @staticmethod
     def compare_predict(predict, result):
