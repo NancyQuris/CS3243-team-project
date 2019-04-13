@@ -48,10 +48,8 @@ class TrainStrength:
     def adjust_weights(self, trial_num, feature_vector_list, result_list):
         prob_map = self.get_feature_prob_map(trial_num, feature_vector_list, result_list)
 
-
-
     @staticmethod
     def compare_predict(predict, result):
-        return result if predict > 0.5 else (1 - result)
+        return result if predict > 0.5 else 0
 
 

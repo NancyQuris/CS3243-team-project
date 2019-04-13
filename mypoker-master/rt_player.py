@@ -3,10 +3,7 @@ from randomplayer import RandomPlayer
 import numpy as np
 from trained_hand_feature_strength import Trained_hand_feature
 from card_feature_vector import CardFeatureVectorCompute
-from pypokerengine.engine.card import Card
 import pypokerengine.utils.card_utils as Card_util
-from pypokerengine.utils import card_utils
-from simulate_rounds import Simulation
 import pprint
 import collections
 
@@ -64,7 +61,6 @@ class RTPlayer(BasePokerPlayer):
     if raiseCount[uuid1] >= 4 or raiseCount[uuid2] >= 4:
         flag = False
 
-    # calculate card strength
     cfvc = CardFeatureVectorCompute()
     thf = Trained_hand_feature()
     card_feature = cfvc.fetch_feature(Card_util.gen_cards(hole_card), Card_util.gen_cards(round_state['community_card']))
@@ -106,6 +102,7 @@ class RTPlayer(BasePokerPlayer):
     if np.random.rand() < self.epsilon(round_state['round_count'])/2 \
         or (flag is False and next_action is 'raise') \
         or (len(valid_actions) is 2 and next_action is 'raise'):
+
         # Condition fro determining whether the next action should be randomly chosen
         # 1. random_number < epsilon/2
         # 2. next_action is 'raise' but raise num alr 4, cannot raise anymore
@@ -231,7 +228,7 @@ class RTPlayer(BasePokerPlayer):
   def isMe(self, uuid):
       return uuid is self.uuid
 
-  # 杨斯涵将会解释此function是干啥的，我编不出来了
+    #TODO (for ysh)
   def sigmoid(self, my_stack, opponent_stack):
       if my_stack > opponent_stack:
           return my_stack/opponent_stack - 1
@@ -279,6 +276,11 @@ class RTPlayer(BasePokerPlayer):
     # To do this, we can have the players act randomly some fraction epsilon of the time, otherwise use their (current-estimated) best options.
     # epsilon will shrink over time
   def epsilon(self, curr_round):
+    '''
+    base = 0.1
+    fraction = (self.max_round - curr_round) / float(self.max_round)
+    return math.exp(-)
+    '''
     return (self.max_round - curr_round) / self.max_round
 
 def setup_ai():

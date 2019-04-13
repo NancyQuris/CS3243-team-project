@@ -25,7 +25,8 @@ class TrainedPlayer(BasePokerPlayer):
     return action # action returned here is sent to the poker engine
 
   def receive_game_start_message(self, game_info):
-#    self.pp.pprint(game_info)
+    # self.pp.pprint(game_info)
+    self.pp.pprint(game_info)
     pass
 
   def receive_round_start_message(self, round_count, hole_card, seats):
@@ -33,6 +34,7 @@ class TrainedPlayer(BasePokerPlayer):
     pass
 
   def receive_street_start_message(self, street, round_state):
+    # self.pp.pprint(round_state)
     community_card = round_state['community_card']
     self.featureStrengthOffline.raw_feed(self.hole_card, community_card, len(community_card))
     pass
