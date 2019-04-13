@@ -21,3 +21,13 @@ class Trained_hand_feature():
 
     def get_strength(self, street):
         return self.streets[street]
+
+    def get_copy_for_train(self):
+        copy = []
+        for i in range(len(self.streets)):
+            d = dict()
+            d['raise'] = np.copy(self.streets[i])
+            d['call'] = np.copy(self.streets[i])
+            d['fold'] = np.multiply(np.copy([self.streets[i]]), -1)
+            copy.append(d)
+        return copy
