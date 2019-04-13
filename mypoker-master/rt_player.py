@@ -158,7 +158,7 @@ class RTPlayer(BasePokerPlayer):
     pass
 
   def receive_street_start_message(self, street, round_state):
-    self.pp.pprint("street: " + street)
+    # self.pp.pprint("street: " + street)
     pass
 
   def receive_game_update_message(self, action, round_state):
