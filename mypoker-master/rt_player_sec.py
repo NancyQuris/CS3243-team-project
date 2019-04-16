@@ -1,14 +1,12 @@
 from pypokerengine.players import BasePokerPlayer
-from randomplayer import RandomPlayer
 import numpy as np
-from trained_hand_feature_strength import Trained_hand_feature
-from card_feature_vector import CardFeatureVectorCompute
+from Group15 import CardFeatureVectorCompute
 import pypokerengine.utils.card_utils as Card_util
 import pprint
 import collections
 
 
-class RTPlayer(BasePokerPlayer):
+class Group15Player(BasePokerPlayer):
 
     def __init__(self):
         super(BasePokerPlayer, self).__init__()
@@ -51,7 +49,6 @@ class RTPlayer(BasePokerPlayer):
                            self.theta_single_step(self.nParams)]
         # helper to compute the strength
         self.cfvc = CardFeatureVectorCompute()
-        self.thf = Trained_hand_feature()
         self.eps = 0
         self.game_count = 0
 
@@ -78,7 +75,7 @@ class RTPlayer(BasePokerPlayer):
         opp_id = 1 - my_id
         card_feature = self.cfvc.fetch_feature(Card_util.gen_cards(self.hole_card),
                                               Card_util.gen_cards(round_state['community_card']))
-        card_strength = np.dot(card_feature, self.thf.get_strength(self.street_idx))
+        card_strength = np.dot(card_feature, self.cfvc.get_strength(self.street_idx))
         my_stack = round_state['seats'][my_id]['stack']
         opp_stack = round_state['seats'][opp_id]['stack']
         my_bet = my_stack - self.stack_record[my_id][1]
@@ -221,4 +218,4 @@ class RTPlayer(BasePokerPlayer):
         return self.eps
 
 def setup_ai():
-    return RandomPlayer()
+    return Group15Player()
