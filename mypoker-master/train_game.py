@@ -2,7 +2,7 @@ from pypokerengine.api.game import setup_config, start_poker
 from randomplayer import RandomPlayer
 from raise_player import RaisedPlayer
 # from rt_player import RTPlayer
-from rt_player_sec import RTPlayer
+from rt_player_sec import  RTPlayer
 import pprint
 
 #TODO:config the config as our wish
@@ -15,5 +15,6 @@ for i in range(8):
     game_result = start_poker(config, verbose=2)
     pp = pprint.PrettyPrinter(indent=2)
     pp.pprint(game_result)
+
 
 pp.pprint(rtplayer.step_theta)

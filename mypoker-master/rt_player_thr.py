@@ -1,12 +1,14 @@
 from pypokerengine.players import BasePokerPlayer
+from randomplayer import RandomPlayer
 import numpy as np
-from Group15 import CardFeatureVectorCompute
+from trained_hand_feature_strength import Trained_hand_feature
+from card_feature_vector import CardFeatureVectorCompute
 import pypokerengine.utils.card_utils as Card_util
 import pprint
 import collections
 
 
-class Group15Player(BasePokerPlayer):
+class RTPlayer(BasePokerPlayer):
 
     def __init__(self):
         super(BasePokerPlayer, self).__init__()
@@ -15,8 +17,8 @@ class Group15Player(BasePokerPlayer):
         ## basic records
         self.street_map = {'preflop': 0, 'flop': 1, 'river': 2, 'turn': 3}
         self.rev_street_map = {0: 'preflop', 1: 'flop', 2: 'river', 3: 'turn'}
-        self.nParams = 4
-        self.learn_factor = [0.01, 0.01, 0.01, 0.01]
+        self.nParams = 21
+        self.learn_factor = [0.02, 0.02, 0.02, 0.02]
 
         ## update every game
         self.initial_stack = 0
@@ -38,17 +40,14 @@ class Group15Player(BasePokerPlayer):
         self.q_suggest = {'raise': 0, 'call': 0, 'fold': 0}
         self.street_idx = 0;
 
-        self.call_static_prob = 0.5
-        self.raise_static_prob = 0.4
-        self.fold_static_prob = 0.1
-
         #TODO: how to initialize theta
-        self.step_theta = [self.theta_single_step(self.nParams + 1),\
-                           self.theta_single_step(self.nParams + 1),\
-                           self.theta_single_step(self.nParams + 1),\
-                           self.theta_single_step(self.nParams + 1)]
+        self.step_theta = [self.theta_single_step(self.nParams),\
+                           self.theta_single_step(self.nParams),\
+                           self.theta_single_step(self.nParams),\
+                           self.theta_single_step(self.nParams)]
         # helper to compute the strength
         self.cfvc = CardFeatureVectorCompute()
+        self.thf = Trained_hand_feature()
         self.eps = 0
         self.game_count = 0
 
@@ -77,8 +76,8 @@ class Group15Player(BasePokerPlayer):
         my_id = self.seat_id
         opp_id = 1 - my_id
         card_feature = self.cfvc.fetch_feature(Card_util.gen_cards(self.hole_card),
-                                              Card_util.gen_cards(round_state['community_card']))
-        card_strength = np.dot(card_feature, self.cfvc.get_strength(self.street_idx))
+                                               Card_util.gen_cards(round_state['community_card']))
+        # card_strength = np.dot(card_feature, self.thf.get_strength(self.street_idx))
         my_stack = round_state['seats'][my_id]['stack']
         opp_stack = round_state['seats'][opp_id]['stack']
         my_bet = my_stack - self.stack_record[my_id][1]
@@ -86,7 +85,8 @@ class Group15Player(BasePokerPlayer):
         my_total_gain = self.total_gain[my_id]
 
         # get the feature vector for every possible action
-        feature_vec = self.phi(card_strength, my_stack, opp_stack, my_bet, opp_bet, my_total_gain)
+        # feature_vec = self.phi(card_strength, my_stack, opp_stack, my_bet, opp_bet, my_total_gain)
+        feature_vec = self.phi(card_feature, my_stack, opp_stack, my_bet, opp_bet, my_total_gain)
         self.feature_vector = feature_vec
 
         # value for taking different action
@@ -202,14 +202,18 @@ class Group15Player(BasePokerPlayer):
                 'call' : np.ones(length),
                 'fold' : np.ones(length)}
 
-    def phi(self, hand_strength, my_stack, opp_stack, my_bet, opp_bet, my_total_gain):
-        return np.array([
-            1,
-            hand_strength,
-            self.diff_normal(my_bet, opp_bet),
-            self.diff_normal(my_stack, opp_stack),
-            self.diff_normal(my_total_gain, - my_total_gain)
-        ])
+    def phi(self, card_feature, my_stack, opp_stack, my_bet, opp_bet, my_total_gain):
+        #return np.array([
+        #   hand_strength,
+        #   self.diff_normal(my_bet, opp_bet),
+        #   self.diff_normal(my_stack, opp_stack),
+        #   self.diff_normal(my_total_gain, - my_total_gain)
+        #])
+        features = self.get_transferred_vec(card_feature)
+        appended = np.array([self.diff_normal(my_bet, opp_bet),
+                             self.diff_normal(my_stack, opp_stack),
+                             self.diff_normal(my_total_gain, - my_total_gain)])
+        return np.append(features, appended)
 
     def sigmoid(self, x):
         return float(1) / (1 + np.exp(-x))
@@ -220,8 +224,8 @@ class Group15Player(BasePokerPlayer):
         return self.sigmoid(float(x - y) / np.abs(y))
 
     def epsilon(self, round_count):
-        self.eps = float(1) / round_count
         # self.eps = float(1) / ((self.game_count - 1) * self.max_round + round_count)
+        self.eps = float(1) / round_count
         return self.eps
 
     def get_result(self):
@@ -234,9 +238,15 @@ class Group15Player(BasePokerPlayer):
         #   avg.append(float(sum) / part_size)
         #   i += part_size
         #return avg
-
         return self.results
 
+    def get_transferred_vec(self, vec):
+        vfunc_f = np.vectorize(self.zero_to_minus_one)
+        return vfunc_f(vec)
+
+    @staticmethod
+    def zero_to_minus_one(a):
+        return -1 if a < 0.5 else 1
 
 def setup_ai():
-    return Group15Player()
+    return RandomPlayer()
