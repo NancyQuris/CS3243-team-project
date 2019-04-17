@@ -40,17 +40,18 @@ class RTPlayer(BasePokerPlayer):
         #update every street
         self.feature_vector = np.ones(self.nParams + 1)
         self.q_suggest = {'raise': 0, 'call': 0, 'fold': 0}
-        self.street_idx = 0
+        self.street_idx = 0;
 
-        self.probs = {'raise': 0.5, 'call': 0.4, 'fold': 0.1}
+        self.call_static_prob = 0.5
+        self.raise_static_prob = 0.4
+        self.fold_static_prob = 0.1
 
         #TODO: how to initialize theta
-        #
-        self.step_theta = Trained_other_feature().get_weights()
-            #[self.theta_single_step(self.nParams + 1),\
-            # self.theta_single_step(self.nParams + 1),\
-            # self.theta_single_step(self.nParams + 1),\
-            # self.theta_single_step(self.nParams + 1)]
+        # Trained_other_feature().get_weights()
+        self.step_theta = [self.theta_single_step(self.nParams + 1),\
+             self.theta_single_step(self.nParams + 1),\
+             self.theta_single_step(self.nParams + 1),\
+             self.theta_single_step(self.nParams + 1)]
         # helper to compute the strength
         self.cfvc = CardFeatureVectorCompute()
         self.thf = Trained_hand_feature()
@@ -58,8 +59,8 @@ class RTPlayer(BasePokerPlayer):
         self.game_count = 0
 
         ## a list to keep record of all results
+        self.accumulate = 0
         self.results = []
-        self.estimated_step_rewards = []
 
 
     def declare_action(self, valid_actions, hole_card, round_state):
@@ -106,22 +107,12 @@ class RTPlayer(BasePokerPlayer):
         self.q_suggest['call'] = q_call
         self.q_suggest['fold'] = q_fold
 
-        sig_raise = self.sigmoid(q_raise)
-        sig_call = self.sigmoid(q_call)
-        sig_fold = self.sigmoid(q_fold)
-        sum_sig = sig_raise + sig_call + sig_fold
-
-        self.probs['raise'] = sig_raise / sum_sig
-        self.probs['call'] = sig_call / sum_sig
-        self.probs['fold'] = sig_fold
-
-        # choose action
+        #choose action
         next_action, probability = self.action_select_helper(valid_actions, flag)
         # print('next action: %s' % next_action)
         expected_reward = self.q_suggest[next_action]
         self.estimated_step_rewards.append([next_action, expected_reward, probability, self.street_idx, self.feature_vector])
-        return next_action
-        # action returned here is sent to the poker engine
+        return next_action # action returned here is sent to the poker engine
 
     def receive_game_start_message(self, game_info):
         # initialise stack record when enters the first round
@@ -188,7 +179,8 @@ class RTPlayer(BasePokerPlayer):
             self.step_theta[step_idx][action] = np.add(self.step_theta[step_idx][action], delta)
         # self.pp.pprint(self.step_theta)
 
-        self.results.append(true_reward)
+        self.accumulate += true_reward
+        self.results.append(self.accumulate)
 
     def action_select_helper(self, valid_actions, flag):
         valid_acts = list(map(lambda x: x['action'], valid_actions))
@@ -196,7 +188,7 @@ class RTPlayer(BasePokerPlayer):
         if not flag and 'raise' in valid_acts:
             valid_acts.remove('raise')
 
-        action_to_choose = {x: self.q_suggest[x] for x in valid_acts}
+        action_to_choose = { x: self.q_suggest[x] for x in valid_acts }
         num_valid = len(valid_acts)
         assert(num_valid > 0)
         max_action = max(action_to_choose, key=action_to_choose.get)
@@ -211,9 +203,9 @@ class RTPlayer(BasePokerPlayer):
             else:
                 # print('here')
                 action = 'fold'
-            return action, self.probs[action]
+            return action, 0.5
         else:
-            return max_action, self.probs[max_action]
+            return max_action, 0.5
 
     def theta_single_step(self, length):
         return {'raise': np.zeros(length),
@@ -239,10 +231,10 @@ class RTPlayer(BasePokerPlayer):
         return self.sigmoid(float(x - y) / np.abs(y))
 
     def epsilon(self, round_count):
-        # self.eps = float(1) / round_count
+        self.eps = float(1) / round_count
         # self.eps = float(1) / ((self.game_count - 1) * self.max_round + round_count)
         # self.eps = 0.1 + 0.9 * float(1) / round_count
-        self.eps = 0.1
+        # self.eps = 0.1
         return self.eps
 
     def get_result(self):
