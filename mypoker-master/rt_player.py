@@ -35,6 +35,7 @@ class RTPlayer(BasePokerPlayer):
     # theta is the weight vector that needs updated
     self.nParams = 6
     self.theta = np.random.rand(self.nParams)
+    self.result = []
 
     # Input:
     #   theta: parameter for current model Qhat
@@ -223,6 +224,8 @@ class RTPlayer(BasePokerPlayer):
                     prob = qFOLD / (qRAISE + qCALL + qFOLD)
                     self.theta += self.alpha * (curr_lvl_reward[1-self.seat_id] - qFOLD) * phiFOLD
                     curr_lvl_reward[1 - self.seat_id] *= prob
+
+    self.results.append(curr_lvl_reward[self.uuid])
 
 
   def isMe(self, uuid):

@@ -36,7 +36,7 @@ class Group15Player(BasePokerPlayer):
         #update every street
         self.feature_vector = np.ones(self.nParams + 1)
         self.q_suggest = {'raise': 0, 'call': 0, 'fold': 0}
-        self.street_idx = 0;
+        self.street_idx = 0
 
         self.call_static_prob = 0.5
         self.raise_static_prob = 0.4
@@ -77,12 +77,12 @@ class Group15Player(BasePokerPlayer):
         my_id = self.seat_id
         opp_id = 1 - my_id
         card_feature = self.cfvc.fetch_feature(Card_util.gen_cards(self.hole_card),
-                                              Card_util.gen_cards(round_state['community_card']))
+                                               Card_util.gen_cards(round_state['community_card']))
         card_strength = np.dot(card_feature, self.cfvc.get_strength(self.street_idx))
         my_stack = round_state['seats'][my_id]['stack']
         opp_stack = round_state['seats'][opp_id]['stack']
-        my_bet = my_stack - self.stack_record[my_id][1]
-        opp_bet = opp_stack - self.stack_record[opp_id][1]
+        my_bet = self.stack_record[my_id][1] - my_stack
+        opp_bet = self.stack_record[opp_id][1] - opp_stack
         my_total_gain = self.total_gain[my_id]
 
         # get the feature vector for every possible action
@@ -170,11 +170,11 @@ class Group15Player(BasePokerPlayer):
         # self.pp.pprint(self.step_theta)
 
         self.results.append(true_reward)
-
+        # self.pp.pprint(round_state)
 
     def action_select_helper(self, valid_actions, flag):
         valid_acts = list(map(lambda x: x['action'], valid_actions))
-        #remove raise if raise is not allowed
+        # remove raise if raise is not allowed
         if not flag and 'raise' in valid_acts:
             valid_acts.remove('raise')
 
@@ -186,9 +186,9 @@ class Group15Player(BasePokerPlayer):
         if self.ifRandom:
             r = np.random.rand()
             action = ''
-            if r < 0.5:
+            if r < 0.4:
                 action = 'call'
-            elif r < 0.9 and num_valid == 3:
+            elif r < 0.8 and num_valid == 3:
                 action = 'raise'
             else:
                 # print('here')
@@ -198,9 +198,9 @@ class Group15Player(BasePokerPlayer):
             return max_action, 0.5
 
     def theta_single_step(self, length):
-        return {'raise' : np.ones(length),
-                'call' : np.ones(length),
-                'fold' : np.ones(length)}
+        return {'raise': np.ones(length),
+                'call': np.ones(length),
+                'fold': np.ones(length)}
 
     def phi(self, hand_strength, my_stack, opp_stack, my_bet, opp_bet, my_total_gain):
         return np.array([

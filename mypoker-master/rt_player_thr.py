@@ -1,14 +1,12 @@
 from pypokerengine.players import BasePokerPlayer
-from randomplayer import RandomPlayer
 import numpy as np
-from trained_hand_feature_strength import Trained_hand_feature
-from card_feature_vector import CardFeatureVectorCompute
+from Group15 import CardFeatureVectorCompute
 import pypokerengine.utils.card_utils as Card_util
 import pprint
 import collections
 
 
-class RTPlayer(BasePokerPlayer):
+class Group15Player(BasePokerPlayer):
 
     def __init__(self):
         super(BasePokerPlayer, self).__init__()
@@ -17,8 +15,8 @@ class RTPlayer(BasePokerPlayer):
         ## basic records
         self.street_map = {'preflop': 0, 'flop': 1, 'river': 2, 'turn': 3}
         self.rev_street_map = {0: 'preflop', 1: 'flop', 2: 'river', 3: 'turn'}
-        self.nParams = 21
-        self.learn_factor = [0.02, 0.02, 0.02, 0.02]
+        self.nParams = 2
+        self.learn_factor = [0.01, 0.01, 0.01, 0.01]
 
         ## update every game
         self.initial_stack = 0
@@ -38,18 +36,20 @@ class RTPlayer(BasePokerPlayer):
         #update every street
         self.feature_vector = np.ones(self.nParams + 1)
         self.q_suggest = {'raise': 0, 'call': 0, 'fold': 0}
-        self.street_idx = 0;
+        self.street_idx = 0
+
+        self.call_static_prob = 0.5
+        self.raise_static_prob = 0.4
+        self.fold_static_prob = 0.1
 
         #TODO: how to initialize theta
-        self.step_theta = [self.theta_single_step(self.nParams),\
-                           self.theta_single_step(self.nParams),\
-                           self.theta_single_step(self.nParams),\
-                           self.theta_single_step(self.nParams)]
-        # helper to compute the strength
         self.cfvc = CardFeatureVectorCompute()
-        self.thf = Trained_hand_feature()
         self.eps = 0
         self.game_count = 0
+        self.step_theta = [self.theta_single_step(0),\
+                           self.theta_single_step(1),\
+                           self.theta_single_step(2),\
+                           self.theta_single_step(3)]
 
         ## a list to keep record of all results
         self.results = []
@@ -77,15 +77,14 @@ class RTPlayer(BasePokerPlayer):
         opp_id = 1 - my_id
         card_feature = self.cfvc.fetch_feature(Card_util.gen_cards(self.hole_card),
                                                Card_util.gen_cards(round_state['community_card']))
-        # card_strength = np.dot(card_feature, self.thf.get_strength(self.street_idx))
+        card_feature = self.transfer_result_neg(card_feature)
         my_stack = round_state['seats'][my_id]['stack']
         opp_stack = round_state['seats'][opp_id]['stack']
-        my_bet = my_stack - self.stack_record[my_id][1]
-        opp_bet = opp_stack - self.stack_record[opp_id][1]
+        my_bet = self.stack_record[my_id][1] - my_stack
+        opp_bet = self.stack_record[opp_id][1] - opp_stack
         my_total_gain = self.total_gain[my_id]
 
         # get the feature vector for every possible action
-        # feature_vec = self.phi(card_strength, my_stack, opp_stack, my_bet, opp_bet, my_total_gain)
         feature_vec = self.phi(card_feature, my_stack, opp_stack, my_bet, opp_bet, my_total_gain)
         self.feature_vector = feature_vec
 
@@ -170,11 +169,11 @@ class RTPlayer(BasePokerPlayer):
         # self.pp.pprint(self.step_theta)
 
         self.results.append(true_reward)
-
+        # self.pp.pprint(round_state)
 
     def action_select_helper(self, valid_actions, flag):
         valid_acts = list(map(lambda x: x['action'], valid_actions))
-        #remove raise if raise is not allowed
+        # remove raise if raise is not allowed
         if not flag and 'raise' in valid_acts:
             valid_acts.remove('raise')
 
@@ -197,23 +196,20 @@ class RTPlayer(BasePokerPlayer):
         else:
             return max_action, 0.5
 
-    def theta_single_step(self, length):
-        return {'raise' : np.ones(length),
-                'call' : np.ones(length),
-                'fold' : np.ones(length)}
+    def theta_single_step(self, street):
+        return {'raise' : self.theta_single_step_action(street),
+                'call' : self.theta_single_step_action(street),
+                'fold' : self.theta_single_step_action(street)}
+
+    def theta_single_step_action(self, street):
+        vec = np.array([0.0])
+        vec = np.append(vec, self.cfvc.get_strength(street))
+        return np.append(vec, np.zeros(self.nParams))
 
     def phi(self, card_feature, my_stack, opp_stack, my_bet, opp_bet, my_total_gain):
-        #return np.array([
-        #   hand_strength,
-        #   self.diff_normal(my_bet, opp_bet),
-        #   self.diff_normal(my_stack, opp_stack),
-        #   self.diff_normal(my_total_gain, - my_total_gain)
-        #])
-        features = self.get_transferred_vec(card_feature)
-        appended = np.array([self.diff_normal(my_bet, opp_bet),
-                             self.diff_normal(my_stack, opp_stack),
-                             self.diff_normal(my_total_gain, - my_total_gain)])
-        return np.append(features, appended)
+        vec = np.array([1.0])
+        vec = np.append(vec, card_feature)
+        return np.append(vec, [float(my_bet - opp_bet)/self.small_blind_amount, float(my_stack - opp_stack)/self.initial_stack])
 
     def sigmoid(self, x):
         return float(1) / (1 + np.exp(-x))
@@ -224,29 +220,21 @@ class RTPlayer(BasePokerPlayer):
         return self.sigmoid(float(x - y) / np.abs(y))
 
     def epsilon(self, round_count):
-        # self.eps = float(1) / ((self.game_count - 1) * self.max_round + round_count)
         self.eps = float(1) / round_count
+        # self.eps = float(1) / ((self.game_count - 1) * self.max_round + round_count)
         return self.eps
 
     def get_result(self):
-        #i = 0
-        #avg = []
-        #while i <= len(self.results) - part_size:
-        #   sum = 0
-        #   for j in range(part_size):
-        #       sum += self.results[i + j]
-        #   avg.append(float(sum) / part_size)
-        #   i += part_size
-        #return avg
         return self.results
 
-    def get_transferred_vec(self, vec):
-        vfunc_f = np.vectorize(self.zero_to_minus_one)
+    def transfer_result_neg(self, vec):
+        vfunc_f = np.vectorize(self.pos_to_neg)
         return vfunc_f(vec)
 
     @staticmethod
-    def zero_to_minus_one(a):
-        return -1 if a < 0.5 else 1
+    def pos_to_neg(val):
+        return 1 if val >= 0.5 else -1
+
 
 def setup_ai():
-    return RandomPlayer()
+    return Group15Player()
