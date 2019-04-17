@@ -48,11 +48,11 @@
 % Multiple author syntax (remove the single-author syntax above and the \iffalse ... \fi here)
 
 \author{
-Alice Pokerton, Bob Folderson,  Claire Royal, Divesh Twopairs
+Gong Changda, Kong Zijin, Liu Yingnan, Liu Yiyang, Yang Sihan
 \\ 
 National University of Singapore\\
 %
-first,second,third,fourth@nus.edu.sg
+first,second,third,fourth@u.nus.edu
 }
 % If your authors do not fit in the default space, you can increase it 
 % by uncommenting the following (adjust the "2.5in" size to make it fit
@@ -65,36 +65,28 @@ first,second,third,fourth@nus.edu.sg
 
 \section{Introduction}
 
-The introduction must contain a concise description of the problem. In particular it should describe
-\begin{enumerate}
-	\item What does your agent do (i.e. what is the problem?)
-	\item Why did you choose this implementation (i.e. why should the reader be interested?)
-	\item What is the result that you achieved? (i.e. why should the reader believe you?)
-\end{enumerate}
-It should be about a column long. 
-\subsection{Length of Papers}
+This project implements a poker player AI agent that acts as one of the two players in Limit Texas Hold’em. The fundamental idea of implementation is using reinforcement learning to build a heuristic evaluation function, which measures the expected reward of each action and make the decision that maximizes the return. Hand strength, current bet and opponent’s bet were the three components that make up the evaluation function. The evaluation function is a linear function that sum up the product of the numerical value of each component and their corresponding weight. To decide the weight of the three components, online training was conducted. The weight for each component reflects the expected influence that the component has on the final result of one round of game. The agent’s decision and final result were feed into the online training at the end of every round, and weight for each component was adjusted. Different from current bet and opponent’s bet which can be obtained directly from game state, the numerical value of hand strength was computed by evaluating hole cards and revealed community cards. A list of poker features, such as high card and pair value was selected to determine the hand strength. Similar to the evaluation function, the function that calculates hand strength is also a linear function that sums up the value of the product of weight and feature. The weight of each feature was determined from our offline training. Traditional approach of poker game agent, like listing preflop chart, is computationally expensive and space consuming. To improve the efficiency while not reducing accuracy, we choose to implement a reinforcement learning based agent. Our agent is able to learn from opponent’s behavior and adjust evaluation function according to opponent’s characteristic. To improve the accuracy of decision making, we trained the hand strength evaluation function of agent offline with large amount of data before playing game with others. In this report, we will explain how we implement the poker agent and discuss how the agent can make optimal decisions. In section 2, we will review a few approaches in past research and analysis their strength and weaknesses. In section 3, we will elaborate our agent’s play strategy, and explain the implementation details and training methods. In section 4, we will discuss the training results and show merits and limitation of our approach. Lastly, we will go into the conclusion and future direction.   
 
-Papers should be four pages long, excluding references. References can take up an unlimited number of pages. Note that only references can appear on the extra page. Sections such as conclusions or acknowledgments should not be placed on the extra references page.
-You may include an appendix with extra results, to be read at the staff's discretion.
+\section{Past research}
+The core of the implementation of an AI poker player agent is to decide the next action it should take giving the information of the environment. Utility maximization and regret minimization are two approaches that have been well explored regarding next action decision. The most traditional method to optimize the utility is to list out results for all possible solutions in each round and select the action that gives highest utility. This method is precise and easy to implement but computational expansive. To reduce the computational effort, some researchers proposed heuristics that evaluate the return of the game and use decision trees to model the next actions that should be take. With sufficient and reasonable training, this method can yield good results. Regret minimization is another popular approach. Regret is defined to be the loss in utility taking this action suffers for not having selected the single best deterministic strategy and the single best deterministic strategy can only be known in hindsight. The approach aims to minimize the regret value. In 2015, Bowling and other 3 scientists announced that they weakly solved Heads-up limit Texas hold’em by using a technique called counterfactual regret minimization which is based on regret minimization. 
+Since we discussed minimax algorithm during class and we are more familiar with the utility maximization approach, we adopted the utility maximization approach. We generate a decision tree at each step and the agent will take the action that gives the highest numeric value of the evaluation function. Evaluation function is another key element of our implementation. From past research, hand strength and pot money are two of the most widely-used factors when constructing the evaluation function. Reinforced learning is also proposed by some researchers to adjust the evaluation function based on information that cannot be got in advance, such as opponent’s behavior.  
 
-\subsection{Word Processing Software}
+\section{Implementation}
 
-As detailed below, IJCAI has prepared and made available a set of
-\LaTeX{} macros and a Microsoft Word template for use in formatting
-your paper. If you are using some other word processing software (such
-as WordPerfect, etc.), please follow the format instructions given
-below and ensure that your final paper looks as much like this sample
-as possible.
+\subsection{Agent strategy}
+In Limit Taxas Holdem Game, each player start as small 
+To play the poker game, our agent estimates the expected quality of each action in current state and choose the optimal action among “fold” “raise” and “call”. “Optimal” action refers to the action which maximizes the expected winning result at one round of game. The heuristic evaluation function to evaluate action is a linear combination of X criteria: (1) expected hand strength (2) ………..
 
-{\bf Note that I did not edit the word document, and it still contains the original IJCAI formatting instructions. Please ignore those!}
 
-\section{Style and Format}
+\subsection{Training method}
 
-\LaTeX{} and Word style files that implement these instructions
-can be retrieved electronically. (See Appendix~\ref{stylefiles} for
-instructions on how to obtain these files.)
+\subsubsection{Offline training}
 
-\subsection{Layout}
+\subsubsection{Online training}
+
+\section{Training Result and analysis}
+
+\section{Conclusion}
 
 Print manuscripts two columns to a page, in the manner in which these
 instructions are printed. The exact dimensions for pages are:

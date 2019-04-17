@@ -1,0 +1,319 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6800) (preloaded format=pdflatex 2018.8.28)  16 APR 2019 00:33
+entering extended mode
+**./ijcai18.tex
+(ijcai18.tex
+LaTeX2e <2018-04-01> patch level 5
+IJCAI-18 Instructions for Authors
+
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/base/article.cls"
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/base/size10.clo"
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+) (ijcai18.sty
+Conference Style, version of 6 September 1995 (revised Nov 2010)
+\titlebox=\skip43
+Named Citation Style, version of 30 November 1994
+)
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/psnfss/times.sty"
+Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
+)
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/xcolor/xcolor.sty"
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/graphics-cfg/color.cfg"
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/graphics-def/pdftex.def"
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
+)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+)
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/soul/soul.sty"
+Package: soul 2003/11/17 v2.4 letterspacing/underlining (mf)
+\SOUL@word=\toks14
+\SOUL@lasttoken=\toks15
+\SOUL@cmds=\toks16
+\SOUL@buffer=\toks17
+\SOUL@token=\toks18
+\SOUL@spaceskip=\skip44
+\SOUL@ttwidth=\dimen103
+\SOUL@uldp=\dimen104
+\SOUL@ulht=\dimen105
+)
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/base/inputenc.sty"
+Package: inputenc 2018/04/06 v1.3b Input encoding file
+\inpenc@prehook=\toks19
+\inpenc@posthook=\toks20
+)
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/caption/caption.sty"
+Package: caption 2018/05/01 v3.3-147 Customizing captions (AR)
+
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/caption/caption3.sty"
+Package: caption3 2018/05/27 v1.8a caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 64.
+
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/graphics/keyval.sty"
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks21
+)
+\captionmargin=\dimen106
+\captionmargin@=\dimen107
+\captionwidth=\dimen108
+\caption@tempdima=\dimen109
+\caption@indent=\dimen110
+\caption@parindent=\dimen111
+\caption@hangindent=\dimen112
+)
+\c@ContinuedFloat=\count88
+) (ijcai18.aux)
+\openout1 = `ijcai18.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 62.
+LaTeX Font Info:    ... okay on input line 62.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 62.
+
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/psnfss/ot1ptm.fd"
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+)
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/conte
+xt/base/supp-pdf.mkii"
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count89
+\scratchdimen=\dimen113
+\scratchbox=\box26
+\nofMPsegments=\count90
+\nofMParguments=\count91
+\everyMPshowfont=\toks22
+\MPscratchCnt=\count92
+\MPscratchDim=\dimen114
+\MPnumerator=\count93
+\makeMPintoPDFobject=\count94
+\everyMPtoPDFconversion=\toks23
+)
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 64.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 64.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 64.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 64.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 64.
+
+Underfull \hbox (badness 1242) in paragraph at lines 68--69
+\OT1/ptm/m/n/10 learning to build a heuristic evaluation function, which
+ []
+
+
+Underfull \hbox (badness 1024) in paragraph at lines 71--73
+\OT1/ptm/m/n/10 The core of the implementation of an AI poker player
+ []
+
+
+Underfull \hbox (badness 1490) in paragraph at lines 71--73
+\OT1/ptm/m/n/10 to model the next actions that should be take. With
+ []
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 76.
+[1{/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/data/pdftex/conf
+ig/pdftex.map}
+
+
+
+]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 83.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 94.
+
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/psnfss/omsptm.fd"
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 94.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 94.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 94.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 112.
+
+
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/psnfss/ot1pcr.fd"
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 118.
+
+
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/psnfss/omspcr.fd"
+File: omspcr.fd 
+)
+LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 118.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 122.
+
+Underfull \hbox (badness 1057) in paragraph at lines 131--134
+\OT1/ptm/m/n/10 authors and affiliations can be done using superindices.
+ []
+
+
+Underfull \hbox (badness 1521) in paragraph at lines 145--148
+\OT1/ptm/m/n/10 sections of your paper. (These instructions use many
+ []
+
+
+Underfull \hbox (badness 1590) in paragraph at lines 158--163
+\OT1/ptm/m/n/10 a blank space of approximately 8 points above and 3
+ []
+
+[2]
+Underfull \hbox (badness 5147) in paragraph at lines 216--220
+\OT1/ptm/m/n/10 Place all illustrations (figures, drawings, tables, and
+ []
+
+
+Underfull \hbox (badness 4060) in paragraph at lines 235--245
+\OT1/ptm/m/n/10 BibT[]X files that implement them was supported by
+ []
+
+
+Underfull \hbox (badness 1466) in paragraph at lines 235--245
+\OT1/ptm/m/n/10 and Morgan Kaufmann Publishers. Preparation of the
+ []
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 248.
+(ijcai18.bbl
+Underfull \hbox (badness 4954) in paragraph at lines 5--8
+\OT1/ptm/m/n/10 and Julie Sussman.  \OT1/ptm/m/it/10 Structure and Interpretati
+on
+ []
+
+
+Underfull \hbox (badness 4647) in paragraph at lines 5--8
+\OT1/ptm/m/it/10 of Computer Programs\OT1/ptm/m/n/10 .  MIT Press, Cambridge,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 11--16
+[]\OT1/ptm/m/n/10 Robert Baumgartner, Georg
+ []
+
+
+Underfull \hbox (badness 1122) in paragraph at lines 19--22
+\OT1/ptm/m/n/10 James G. Schmolze.  An overview of the KL-ONE
+ []
+
+
+Underfull \hbox (badness 1810) in paragraph at lines 25--29
+[]\OT1/ptm/m/n/10 Georg Gottlob, Nicola Leone, and
+ []
+
+
+Underfull \hbox (badness 1648) in paragraph at lines 25--29
+\OT1/ptm/m/n/10 Francesco Scarcello.  Hypertree decompositions and
+ []
+
+
+Underfull \hbox (badness 1297) in paragraph at lines 25--29
+\OT1/ptm/m/n/10 tractable queries.  \OT1/ptm/m/it/10 Journal of Computer and Sy
+stem
+ []
+
+
+Underfull \hbox (badness 1565) in paragraph at lines 31--34
+[]\OT1/ptm/m/n/10 Georg Gottlob.  Complexity results for
+ []
+
+
+Underfull \hbox (badness 1348) in paragraph at lines 36--39
+[]\OT1/ptm/m/n/10 Hector J. Levesque.  Foundations of
+ []
+
+
+Underfull \hbox (badness 4954) in paragraph at lines 36--39
+\OT1/ptm/m/n/10 a functional approach to knowledge representation.
+ []
+
+
+Underfull \hbox (badness 1308) in paragraph at lines 41--46
+\OT1/ptm/m/it/10 Conference on Artificial Intelligence\OT1/ptm/m/n/10 , pages 1
+98--202,
+ []
+
+) [3] (ijcai18.aux) ) 
+Here is how much of TeX's memory you used:
+ 2651 strings out of 494891
+ 40734 string characters out of 3176685
+ 112210 words of memory out of 3000000
+ 6278 multiletter control sequences out of 15000+200000
+ 27384 words of font info for 55 fonts, out of 3000000 for 9000
+ 0 hyphenation exceptions out of 8191
+ 36i,11n,38p,2528b,252s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/Users/yingnanliu/Library/Application Support/MiKTeX/texm
+fs/install/fonts/enc/dvips/base/8r.enc}</Users/yingnanliu/Library/Application S
+upport/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/
+yingnanliu/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public
+/amsfonts/cm/cmsy7.pfb></Users/yingnanliu/Library/Application Support/MiKTeX/te
+xmfs/install/fonts/type1/urw/courier/ucrr8a.pfb></Users/yingnanliu/Library/Appl
+ication Support/MiKTeX/texmfs/install/fonts/type1/urw/times/utmb8a.pfb></Users/
+yingnanliu/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/urw/ti
+mes/utmr8a.pfb></Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/ins
+tall/fonts/type1/urw/times/utmri8a.pfb>
+Output written on ijcai18.pdf (3 pages, 92811 bytes).
+PDF statistics:
+ 37 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
