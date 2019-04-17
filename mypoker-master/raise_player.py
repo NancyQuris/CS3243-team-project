@@ -1,41 +1,9 @@
 from pypokerengine.players import BasePokerPlayer
 from randomplayer import RandomPlayer
-from time import sleep
-import pprint
-import collections
-from feature_strength_offline import FeatureStrengthOffline
 
 class RaisedPlayer(BasePokerPlayer):
 
   def declare_action(self, valid_actions, hole_card, round_state):
-    # check if raise 4 times alr, cannot raise any more
-
-  # round_state
-    pp = pprint.PrettyPrinter(indent=2)
-    print("------------------------VALID ACTIONS----------------------------------")
-    pp.pprint(valid_actions)
-    flag = True
-    current_round = round_state['action_histories'][round_state['street']]
-    uuid1 = round_state['seats'][0]['uuid']
-    uuid2 = round_state['seats'][1]['uuid']
-    raiseCount = collections.defaultdict(int)
-
-    for action_details in current_round:
-        if action_details['action'] is 'RAISE' or 'BIGBLIND':
-            # Big blind is also considered as 'RAISE'
-            raiseCount[action_details['uuid']] += 1
-
-    if raiseCount[uuid1] >= 4 or raiseCount[uuid2] >= 4:
-        flag = False
-
-    pp.pprint("ROUND STATE")
-    pp.pprint(round_state)
-
-    # get community card
-    community_card = round_state['community_card']
-    # step represents the number of steps
-
-
 
     for i in valid_actions:
         if i["action"] == "raise" :

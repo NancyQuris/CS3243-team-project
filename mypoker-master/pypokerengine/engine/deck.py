@@ -44,4 +44,3 @@ class Deck:
   def __setup_cheat_deck(self):
     cards = [Card.from_id(cid) for cid in self.cheat_card_ids]
     return cards[::-1]
-
