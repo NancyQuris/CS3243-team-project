@@ -22,6 +22,13 @@ class Trained_hand_feature():
     def get_strength(self, street):
         return self.streets[street]
 
+    def get_strength_avg(self):
+        result = []
+        for d in self.streets:
+            result = np.add(d, result)
+        result = np.true_divide(result, len(self.streets))
+        return result
+
     def get_copy_for_train(self):
         copy = []
         for i in range(len(self.streets)):
