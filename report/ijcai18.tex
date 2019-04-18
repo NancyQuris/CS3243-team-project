@@ -74,8 +74,19 @@ Since we discussed minimax algorithm during class and we are more familiar with 
 \section{Implementation}
 
 \subsection{Agent strategy}
-In Limit Taxas Holdem Game, each player start as small 
-To play the poker game, our agent estimates the expected quality of each action in current state and choose the optimal action among “fold” “raise” and “call”. “Optimal” action refers to the action which maximizes the expected winning result at one round of game. The heuristic evaluation function to evaluate action is a linear combination of X criteria: (1) expected hand strength (2) ………..
+To play Limit Taxas Hold'em Game, our poker agent evaluates the environment and estimates expected return of actions to make decisions. 
+\begin{enumerate}
+	\item When it’s the poker agent’s turn to bet, the poker agent will firstly evaluate the strength of hole cards combining revealed community cards. The hand strength is evaluated based on existing card features in hand and current betting round. The poker agent takes 18 cards features into consideration. Hand strength evaluation function is a linear combination of those 18 card feature’s value. While playing, agent uses the function settled by offline training before game to estimate the strength of cards. The function and offline training will be further elaborated in the following section. 
+	\item After evaluating hand strength, agent will estimates the expected reward of the whole round of game if choosing each action (‘call’, ‘raise’ or ‘fold’). The expected reward is estimated by evaluation function, which is a linear combination of hand strength, the difference between the current bet and the opponent’s bet, the difference between the current remaining money and the money in the opponent’s stack, and the difference between my gain and the opponent’s gain:
+	
+	\item What is the result that you achieved? (i.e. why should the reader believe you?)
+\end{enumerate}
+
+\subsection{Evaluation function}
+Generally speaking, the hand strength of the combination of hole cards and revealed community card is static. The evaluation function of hand strength is obtained by offline training and settled before the start of game. It is not affected by opponents’  behavior and will not be adjusted in the process of playing game.                       
+Hand strength evaluation function is a linear combination of all features appearing in the combination of hole cards and revealed community card(s). There are 18 features that our agent use to estimate hand strength. 
+\\All the 18 card features of 4 types are shown below.
+
 
 
 \subsection{Training method}
@@ -83,9 +94,15 @@ To play the poker game, our agent estimates the expected quality of each action 
 \subsubsection{Offline training}
 
 \subsubsection{Online training}
+To enable our agent to learn from games that it have been played with the opponent, the weight for each feature in the evaluation function is adjusted to improve the accuracy of our evaluation. As mentioned in section 3.2, our evaluation function for each action calculate the expected reward of taking the action. Based on the result at the end of every round, the value of the weight vector, $\theta$ will be adjusted.
+\\At the first round, pre-hardcoded base weight is used in the evaluation function. The base weight was derived from our offline training with random player (?, not sure). Monte Carlo algorithm was used.
+\\At the end of each round, $\theta$ for each action will be updated inside \begin{verbatim}receive_round_result_messge() \end{verbatim}function. Stochastic gradient descent approach is used to update $\theta$.
 
 \section{Training Result and analysis}
-
+\subsection{Offline training result}
+\subsection{Online training result}
+\subsection{discussion}
+Our implementation has three main advantages. Firstly, the approach we used to solve this problem is intuitive and fits the characteristic of poker game. Instead of generating game tree and running minimax algorithm to solve the problem, we use decision tree. The restriction of minimax algorithm in imperfect information game is mentioned by several researchers. Decision tree, in the other hand, requires less space and simulate well people's behavior in real life. Secondly, we took a wide range of features into consideration which makes our evaluation more complete and precise. Thirdly, by using reinforcement learning, we adjust the weight of each feature promptly.
 \section{Conclusion}
 
 Print manuscripts two columns to a page, in the manner in which these
