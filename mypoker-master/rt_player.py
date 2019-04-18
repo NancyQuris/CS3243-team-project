@@ -283,5 +283,7 @@ class RTPlayer(BasePokerPlayer):
     '''
     return (self.max_round - curr_round) / self.max_round
 
+
+
 def setup_ai():
   return RandomPlayer()

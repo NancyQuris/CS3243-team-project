@@ -80,8 +80,8 @@ class RTPlayer(BasePokerPlayer):
         # card_strength = np.dot(card_feature, self.thf.get_strength(self.street_idx))
         my_stack = round_state['seats'][my_id]['stack']
         opp_stack = round_state['seats'][opp_id]['stack']
-        my_bet = my_stack - self.stack_record[my_id][1]
-        opp_bet = opp_stack - self.stack_record[opp_id][1]
+        my_bet = self.stack_record[my_id][1] - my_stack
+        opp_bet = self.stack_record[opp_id][1] - opp_stack
         my_total_gain = self.total_gain[my_id]
 
         # get the feature vector for every possible action
