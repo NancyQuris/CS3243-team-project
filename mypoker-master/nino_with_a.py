@@ -18,7 +18,7 @@ class RTPlayer(BasePokerPlayer):
         ## basic records
         self.street_map = {'preflop': 0, 'flop': 1, 'river': 2, 'turn': 3}
         self.rev_street_map = {0: 'preflop', 1: 'flop', 2: 'river', 3: 'turn'}
-        self.nParams = 4
+        self.nParams = 5
         # self.learn_factor = [0.01, 0.01, 0.01, 0.01]
         self.learn_factor = 0
         self.scale_factor = 0.5
@@ -118,7 +118,8 @@ class RTPlayer(BasePokerPlayer):
         # print('next action: %s' % next_action)
         expected_reward = self.q_suggest[next_action]
         self.estimated_step_rewards.append([next_action, expected_reward, probability, self.street_idx, self.feature_vector])
-        return next_action # action returned here is sent to the poker engine
+        print(next_action)
+        return next_action  # action returned here is sent to the poker engine
 
     def receive_game_start_message(self, game_info):
         # initialise stack record when enters the first round
@@ -127,9 +128,9 @@ class RTPlayer(BasePokerPlayer):
         self.small_blind_amount = game_info['rule']['small_blind_amount']
 
         if game_info['seats'][0]['uuid'] is self.uuid:
-            self.seat_id = 0;
+            self.seat_id = 0
         else:
-            self.seat_id = 1;
+            self.seat_id = 1
 
         self.stack_record = [[self.initial_stack] * 2, [self.initial_stack] * 2]
 
@@ -285,19 +286,20 @@ class RTPlayer(BasePokerPlayer):
         assert(num_valid > 0)
         max_action = max(action_to_choose, key=action_to_choose.get)
 
+        remains = []
+        for act in valid_acts:
+            if act != max_action:
+                remains.append(act)
+
         if self.ifRandom:
-            r = np.random.rand()
             action = ''
-            if r < 0.5:
-                action = 'call'
-            elif r < 0.9 and num_valid == 3:
-                action = 'raise'
+            if len(remains) is 1:
+                action = remains[0]
             else:
-                # print('here')
-                action = 'fold'
-            return action, 0.5
-        else:
-            return max_action, 0.5
+                action = remains[0] if np.random.rand() < 0.5 else remains[1]
+            return action, self.scale_factor
+
+        return max_action, self.scale_factor
 
     def theta_single_step(self, length):
         return {'raise': np.zeros(length),
@@ -307,12 +309,13 @@ class RTPlayer(BasePokerPlayer):
     def phi(self, hand_strength, isMe, my_stack, opp_stack, my_bet, opp_bet, my_total_gain):
         return np.array([
             1,
+            1 if isMe else 0.5,
             hand_strength,
             # self.diff_normal(my_bet, opp_bet),
             (my_bet - opp_bet) / float(10),
             self.diff_normal(my_stack, opp_stack),
             self.diff_normal(my_total_gain, - my_total_gain)
-        ]) * (1 if isMe else -1)
+        ])
 
     def sigmoid(self, x):
         return float(1) / (1 + np.exp(-x))
@@ -323,10 +326,10 @@ class RTPlayer(BasePokerPlayer):
         return self.sigmoid(float(x - y) / np.abs(y))
 
     def epsilon(self, round_count):
+        # self.eps = round_count / self.max_round
         self.eps = float(1) / round_count
         # self.eps = float(1) / ((self.game_count - 1) * self.max_round + round_count)
         # self.eps = 0.1 + 0.9 * float(1) / round_count
-        # self.eps = 0.1
         return self.eps
 
     def get_result(self):
