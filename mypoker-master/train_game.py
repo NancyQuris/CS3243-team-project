@@ -1,7 +1,7 @@
 from pypokerengine.api.game import setup_config, start_poker
 from randomplayer import RandomPlayer
 from raise_player import RaisedPlayer
-from call_player import CallPlayer
+#from call_player import CallPlayer
 # from rt_player import RTPlayer
 # from rt_player_sec import RTPlayer
 # from rt_player_thr import RTPlayer

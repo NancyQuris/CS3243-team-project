@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6800) (preloaded format=pdflatex 2018.8.28)  18 APR 2019 02:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6800) (preloaded format=pdflatex 2018.8.28)  18 APR 2019 18:53
 entering extended mode
 **./ijcai18.tex
 (ijcai18.tex
@@ -99,22 +99,30 @@ Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \caption@hangindent=\dimen112
 )
 \c@ContinuedFloat=\count88
+)
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/multirow/multirow.sty"
+Package: multirow 2019/01/01 v2.4 Span multiple rows of a table
+\multirow@colwidth=\skip45
+\multirow@cntb=\count89
+\multirow@dima=\skip46
+\bigstrutjot=\dimen113
 ) (ijcai18.aux)
 \openout1 = `ijcai18.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 62.
-LaTeX Font Info:    ... okay on input line 62.
-LaTeX Font Info:    Try loading font information for OT1+ptm on input line 62.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 63.
+LaTeX Font Info:    ... okay on input line 63.
+LaTeX Font Info:    Try loading font information for OT1+ptm on input line 63.
 
 ("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
 /psnfss/ot1ptm.fd"
@@ -123,60 +131,57 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 ("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/conte
 xt/base/supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count89
-\scratchdimen=\dimen113
+\scratchcounter=\count90
+\scratchdimen=\dimen114
 \scratchbox=\box26
-\nofMPsegments=\count90
-\nofMParguments=\count91
+\nofMPsegments=\count91
+\nofMParguments=\count92
 \everyMPshowfont=\toks22
-\MPscratchCnt=\count92
-\MPscratchDim=\dimen114
-\MPnumerator=\count93
-\makeMPintoPDFobject=\count94
+\MPscratchCnt=\count93
+\MPscratchDim=\dimen115
+\MPnumerator=\count94
+\makeMPintoPDFobject=\count95
 \everyMPtoPDFconversion=\toks23
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 64.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 65.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <12> on input line 64.
+(Font)              <12> on input line 65.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <8> on input line 64.
+(Font)              <8> on input line 65.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <6> on input line 64.
+(Font)              <6> on input line 65.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 64.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 65.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 72.
 
-Underfull \hbox (badness 1242) in paragraph at lines 68--69
-\OT1/ptm/m/n/10 learning to build a heuristic evaluation function, which
+("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
+/psnfss/omsptm.fd"
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 72.
+
+Underfull \hbox (badness 1009) in paragraph at lines 77--80
+\OT1/ptm/m/n/10 strategy by itself, i.e. unsupervised learning given the
+ []
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 84.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 91.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 91.
+
+Underfull \hbox (badness 10000) in paragraph at lines 89--93
+
  []
 
 
-Underfull \hbox (badness 1024) in paragraph at lines 71--73
-\OT1/ptm/m/n/10 The core of the implementation of an AI poker player
- []
-
-
-Underfull \hbox (badness 1490) in paragraph at lines 71--73
-\OT1/ptm/m/n/10 to model the next actions that should be take. With
- []
-
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 76.
-
-Underfull \hbox (badness 1642) in paragraph at lines 77--78
-\OT1/ptm/m/n/10 To play Limit Taxas Hold'em Game, our poker agent
- []
-
-
-Underfull \hbox (badness 1859) in paragraph at lines 79--80
-\OT1/ptm/m/n/10 revealed community cards. The hand strength is
- []
-
-
-Underfull \hbox (badness 1565) in paragraph at lines 79--80
-\OT1/ptm/m/n/10 function is a linear combination of those 18 card
+Underfull \hbox (badness 1184) in paragraph at lines 89--93
+\OT1/ptm/m/n/10 can be categorized into two categories: direct learning
  []
 
 [1{/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/data/pdftex/conf
@@ -185,78 +190,68 @@ ig/pdftex.map}
 
 
 ]
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 94.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 97.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 97.
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 99.
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 96.
+
+Underfull \hbox (badness 1642) in paragraph at lines 97--98
+\OT1/ptm/m/n/10 To play Limit Taxas Hold'em Game, our poker agent
+ []
+
+
+Underfull \hbox (badness 1859) in paragraph at lines 99--100
+\OT1/ptm/m/n/10 revealed community cards. The hand strength is
+ []
+
+
+Underfull \hbox (badness 1565) in paragraph at lines 99--100
+\OT1/ptm/m/n/10 function is a linear combination of those 18 card
+ []
+
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 100.
+
 
 ("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
 /psnfss/ot1pcr.fd"
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Underfull \hbox (badness 1057) in paragraph at lines 105--106
+Underfull \hbox (badness 2460) in paragraph at lines 100--100
+\OT1/ptm/m/n/10 bet, the difference between the current remaining
+ []
+
+
+Underfull \hbox (badness 1383) in paragraph at lines 104--106
+\OT1/ptm/m/n/10 To make the evaluation function estimate expected
+ []
+
+
+Overfull \hbox (75.92622pt too wide) in paragraph at lines 114--141
+ [] 
+ []
+
+
+Underfull \hbox (badness 3482) in paragraph at lines 142--143
+\OT1/ptm/m/n/10 The hand strength evaluation function $\OML/cmm/m/it/10 H$ \OT1
+/ptm/m/n/10 is a linear
+ []
+
+
+LaTeX Warning: Command \textellipsis invalid in math mode on input line 145.
+
+
+LaTeX Warning: Command \textellipsis invalid in math mode on input line 148.
+
+[2]
+Underfull \hbox (badness 2293) in paragraph at lines 158--160
+\OT1/ptm/m/n/10 rounds, $\OML/cmm/m/it/10 $ \OT1/ptm/m/n/10 will be updated at
+ the end of each round
+ []
+
+
+Underfull \hbox (badness 1057) in paragraph at lines 167--168
 \OT1/ptm/m/n/10 game tree and running minimax algorithm to solve the
  []
 
-
-Underfull \vbox (badness 1342) has occurred while \output is active []
-
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 111.
-
-
-("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
-/psnfss/omsptm.fd"
-File: omsptm.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 111.
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 135.
-
-
-("/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/tex/latex
-/psnfss/omspcr.fd"
-File: omspcr.fd 
-)
-LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 135.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <9> on input line 139.
-
-Underfull \hbox (badness 1057) in paragraph at lines 148--151
-\OT1/ptm/m/n/10 authors and affiliations can be done using superindices.
- []
-
-[2]
-Underfull \hbox (badness 1521) in paragraph at lines 162--165
-\OT1/ptm/m/n/10 sections of your paper. (These instructions use many
- []
-
-
-Underfull \hbox (badness 1590) in paragraph at lines 175--180
-\OT1/ptm/m/n/10 a blank space of approximately 8 points above and 3
- []
-
-
-Underfull \hbox (badness 5147) in paragraph at lines 233--237
-\OT1/ptm/m/n/10 Place all illustrations (figures, drawings, tables, and
- []
-
-
-Underfull \hbox (badness 4060) in paragraph at lines 252--262
-\OT1/ptm/m/n/10 BibT[]X files that implement them was supported by
- []
-
-
-Underfull \hbox (badness 1466) in paragraph at lines 252--262
-\OT1/ptm/m/n/10 and Morgan Kaufmann Publishers. Preparation of the
- []
-
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 265.
-[3] (ijcai18.bbl
+(ijcai18.bbl
 Underfull \hbox (badness 4954) in paragraph at lines 5--8
 \OT1/ptm/m/n/10 and Julie Sussman.  \OT1/ptm/m/it/10 Structure and Interpretati
 on
@@ -298,7 +293,7 @@ Underfull \hbox (badness 1565) in paragraph at lines 31--34
 []\OT1/ptm/m/n/10 Georg Gottlob.  Complexity results for
  []
 
-
+[3]
 Underfull \hbox (badness 1348) in paragraph at lines 36--39
 []\OT1/ptm/m/n/10 Hector J. Levesque.  Foundations of
  []
@@ -318,27 +313,32 @@ Underfull \hbox (badness 1308) in paragraph at lines 41--46
 
 ] (ijcai18.aux) ) 
 Here is how much of TeX's memory you used:
- 2650 strings out of 494891
- 40718 string characters out of 3176685
- 112210 words of memory out of 3000000
- 6277 multiletter control sequences out of 15000+200000
- 27384 words of font info for 55 fonts, out of 3000000 for 9000
+ 2667 strings out of 494891
+ 41101 string characters out of 3176685
+ 117210 words of memory out of 3000000
+ 6301 multiletter control sequences out of 15000+200000
+ 19576 words of font info for 42 fonts, out of 3000000 for 9000
  0 hyphenation exceptions out of 8191
- 36i,11n,38p,2528b,252s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,11n,38p,2011b,252s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/i
 nstall/fonts/enc/dvips/base/8r.enc}</Users/yingnanliu/Library/Application Suppo
-rt/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/ying
+rt/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/ying
 nanliu/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/ams
-fonts/cm/cmsy10.pfb></Users/yingnanliu/Library/Application Support/MiKTeX/texmf
-s/install/fonts/type1/public/amsfonts/cm/cmsy7.pfb></Users/yingnanliu/Library/A
-pplication Support/MiKTeX/texmfs/install/fonts/type1/urw/courier/ucrr8a.pfb></U
-sers/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/u
-rw/times/utmb8a.pfb></Users/yingnanliu/Library/Application Support/MiKTeX/texmf
-s/install/fonts/type1/urw/times/utmr8a.pfb></Users/yingnanliu/Library/Applicati
-on Support/MiKTeX/texmfs/install/fonts/type1/urw/times/utmri8a.pfb>
-Output written on ijcai18.pdf (4 pages, 103929 bytes).
+fonts/cm/cmmi10.pfb></Users/yingnanliu/Library/Application Support/MiKTeX/texmf
+s/install/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/yingnanliu/Library/A
+pplication Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr10.p
+fb></Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install/fonts/t
+ype1/public/amsfonts/cm/cmr7.pfb></Users/yingnanliu/Library/Application Support
+/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/yingna
+nliu/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/urw/courier/
+ucrr8a.pfb></Users/yingnanliu/Library/Application Support/MiKTeX/texmfs/install
+/fonts/type1/urw/times/utmb8a.pfb></Users/yingnanliu/Library/Application Suppor
+t/MiKTeX/texmfs/install/fonts/type1/urw/times/utmr8a.pfb></Users/yingnanliu/Lib
+rary/Application Support/MiKTeX/texmfs/install/fonts/type1/urw/times/utmri8a.pf
+b>
+Output written on ijcai18.pdf (4 pages, 139342 bytes).
 PDF statistics:
- 44 PDF objects out of 1000 (max. 8388607)
+ 56 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

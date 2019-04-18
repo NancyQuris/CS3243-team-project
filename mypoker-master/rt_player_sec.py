@@ -184,7 +184,7 @@ class RTPlayer(BasePokerPlayer):
             # update the theta
             prob *= probability
             delta = np.multiply(feature_vec, (true_reward - expected_reward) * prob * self.learn_factor)
-            # print('true reward: %6.3f, expected reward: %6.3f' % (true_reward, expected_reward))
+            #print('true reward: %6.3f, expected reward: %6.3f' % (true_reward, expected_reward))
             self.step_theta[step_idx][action] = np.add(self.step_theta[step_idx][action], delta)
         # self.pp.pprint(self.step_theta)
 

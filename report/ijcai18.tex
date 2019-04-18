@@ -18,6 +18,7 @@
 \usepackage{soul}
 \usepackage[utf8]{inputenc}
 \usepackage[small]{caption}
+\usepackage{multirow}
 
 % the following package is optional:
 %\usepackage{latexsym} 
@@ -64,12 +65,31 @@ first,second,third,fourth@u.nus.edu
 \maketitle
 
 \section{Introduction}
+Poker games have recently become a heated area of Artificial Intelligence research because of its characteristic that the dynamic environment and disclosed community card makes it impossible to directly calculate or predict the final outcome of taking a certain action. 
+\\In this project, we design and implement an AI-poker agent playing Limit Texas Hold’em, which is, in this project setting, a two-player zero-sum game with incomplete and imperfect information. The ability to act based on hand strength, interpret the opponent’s actions and learn from their strategies is the way towards winning. We work on developing an intelligent agent that would find the optimal strategy and learn from the opponent’s strategy.
+\\This report illustrates the development of an intelligent agent using reinforcement learning. Our poker agent is expected to have the ability to design an optimal game strategy based on key information:
+\begin{itemize}
+	\item Hand strength estimation
+	\item Community card strength estimation
+	\item Analysis of opponent’s strategy
+	\item Current reward evaluation
+\end{itemize}
+Our poker agent is supposed to create an optimal game strategy by itself, i.e. unsupervised learning given the information above. The optimal game strategy should include the part that it can analyze the strategy of the opponent and learn from it accordingly.
+\\“Poker games can be defined as a partially observable Markov decision process (POMDP)”. As its definition states, the POMDP has no complete and exact solution. Reinforcement learning is only capable of making models for the Markov decision process (MDP). Considering this, what we can do is to select `significant` factors in a certain state and calculate an expected reward function instead of completely defining the current state and calculating the value function (which we are not capable of due to the natural character of a poker game).
+\\Our overally training strategy can be categorized into two parts: Offline training and Online training. The offline training is used to estimate hand strength and the combined strength of cards in hand (hole card) and community card. The online training is the main part of our reinforcement learning process, which including training weights for every feature we select as well as learning from the opponent’s strategy. 
 
-This project implements a poker player AI agent that acts as one of the two players in Limit Texas Hold’em. The fundamental idea of implementation is using reinforcement learning to build a heuristic evaluation function, which measures the expected reward of each action and make the decision that maximizes the return. Hand strength, current bet and opponent’s bet were the three components that make up the evaluation function. The evaluation function is a linear function that sum up the product of the numerical value of each component and their corresponding weight. To decide the weight of the three components, online training was conducted. The weight for each component reflects the expected influence that the component has on the final result of one round of game. The agent’s decision and final result were feed into the online training at the end of every round, and weight for each component was adjusted. Different from current bet and opponent’s bet which can be obtained directly from game state, the numerical value of hand strength was computed by evaluating hole cards and revealed community cards. A list of poker features, such as high card and pair value was selected to determine the hand strength. Similar to the evaluation function, the function that calculates hand strength is also a linear function that sums up the value of the product of weight and feature. The weight of each feature was determined from our offline training. Traditional approach of poker game agent, like listing preflop chart, is computationally expensive and space consuming. To improve the efficiency while not reducing accuracy, we choose to implement a reinforcement learning based agent. Our agent is able to learn from opponent’s behavior and adjust evaluation function according to opponent’s characteristic. To improve the accuracy of decision making, we trained the hand strength evaluation function of agent offline with large amount of data before playing game with others. In this report, we will explain how we implement the poker agent and discuss how the agent can make optimal decisions. In section 2, we will review a few approaches in past research and analysis their strength and weaknesses. In section 3, we will elaborate our agent’s play strategy, and explain the implementation details and training methods. In section 4, we will discuss the training results and show merits and limitation of our approach. Lastly, we will go into the conclusion and future direction.   
 
 \section{Past research}
-The core of the implementation of an AI poker player agent is to decide the next action it should take giving the information of the environment. Utility maximization and regret minimization are two approaches that have been well explored regarding next action decision. The most traditional method to optimize the utility is to list out results for all possible solutions in each round and select the action that gives highest utility. This method is precise and easy to implement but computational expansive. To reduce the computational effort, some researchers proposed heuristics that evaluate the return of the game and use decision trees to model the next actions that should be take. With sufficient and reasonable training, this method can yield good results. Regret minimization is another popular approach. Regret is defined to be the loss in utility taking this action suffers for not having selected the single best deterministic strategy and the single best deterministic strategy can only be known in hindsight. The approach aims to minimize the regret value. In 2015, Bowling and other 3 scientists announced that they weakly solved Heads-up limit Texas hold’em by using a technique called counterfactual regret minimization which is based on regret minimization. 
-Since we discussed minimax algorithm during class and we are more familiar with the utility maximization approach, we adopted the utility maximization approach. We generate a decision tree at each step and the agent will take the action that gives the highest numeric value of the evaluation function. Evaluation function is another key element of our implementation. From past research, hand strength and pot money are two of the most widely-used factors when constructing the evaluation function. Reinforced learning is also proposed by some researchers to adjust the evaluation function based on information that cannot be got in advance, such as opponent’s behavior.  
+To implement an intelligent poker agent, one key point is to decide the player’s next action at every game state based on the information obtained from the surrounding environment and its strategy. Utility maximization and regret minimization are two approaches that have been well explored and researched on. 
+\subsubsection{Utility maximation}
+The most traditional method to optimize the value of the utility function is to enumerate the results for all possible solutions in each round and select the action that gives the highest utility value [Tipton, 2012]. Although this method is precise and implementation friendly, it is excessively computational expensive. To reduce the computational cost, researchers have proposed heuristics to evaluate the backward reward of the game. They also utilized decision trees to model all the possible next-actions and decide what one should be taken [Silva et al., 2018]. With a sufficient and reasonable amount of training, this method can yield good results.
+\subsubsection{Regret minimization}
+Regret is defined as the loss of utility that taking a certain action will suffer. The regret is generated when the agent failed to select the single best next-action, which means the player’s strategy is not the single best deterministic strategy. And this approach aims to minimize regret value. In 2015, Bowling and other 3 scientists announced that they weakly solved Heads-up limit Texas hold’em by using a technique called counterfactual regret minimization based on regret minimization. 
+\subsubsection{Reinforcement learning}
+Reinforcement learning is to learn how to map states to actions in order to maximize the numerical value of a reward. The learner in reinforcement does not know which action to take and is supposed to deduce the action that yields the highest reward. According to Sutton and Barto (1998), in the relatively challenging cases, actions affect not only the immediate reward but also the next and even all subsequent rewards. This enlightens the idea of our implementation. This is because in the context of Limit Texas Hold’em, an action in a middle way does not have an immediate reward, and we need to calculate the expected reward at every step and adjust feature weights according to the difference between it and the final actual reward. 
+\\
+\\For MDP problems, most commonly-accepted algorithms can be categorized into two categories: direct learning (DL) and indirect learning (IDL). Direct learning includes a value-function based learning such as temporal difference (TD) learning, Q-learning. Our implementation is based on value-function based learning. The heuristic function we use is of $<$state, action$>$-tuple structure that estimates the expected reward that player can obtain when executing a certain action.
+Furthermore, since reinforcement learning cannot solve POMDP problems, we need to adjust our training strategy to make it best fits this Limit Texas Hold’em game. 
 
 \section{Implementation}
 
@@ -77,26 +97,68 @@ Since we discussed minimax algorithm during class and we are more familiar with 
 To play Limit Taxas Hold'em Game, our poker agent evaluates the environment and estimates expected return of actions to make decisions. 
 \begin{enumerate}
 	\item When it’s the poker agent’s turn to bet, the poker agent will firstly evaluate the strength of hole cards combining revealed community cards. The hand strength is evaluated based on existing card features in hand and current betting round. The poker agent takes 18 cards features into consideration. Hand strength evaluation function is a linear combination of those 18 card feature’s value. While playing, agent uses the function settled by offline training before game to estimate the strength of cards. The function and offline training will be further elaborated in the following section. 
-	\item After evaluating hand strength, agent will estimates the expected reward of the whole round of game if choosing each action (‘call’, ‘raise’ or ‘fold’). The expected reward is estimated by evaluation function, which is a linear combination of hand strength, the difference between the current bet and the opponent’s bet, the difference between the current remaining money and the money in the opponent’s stack, and the difference between my gain and the opponent’s gain:
-	
-	\item What is the result that you achieved? (i.e. why should the reader believe you?)
+	\item After evaluating hand strength, agent will estimates the expected reward of the whole round of game if choosing each action \verb|{‘call’, ‘raise’ or ‘fold}|. The expected reward is estimated by evaluation function $E$, which is a linear combination of hand strength, the difference between the current bet and the opponent’s bet, the difference between the current remaining money and the money in the opponent’s stack, and the difference between my gain and the opponent’s gain: \[E_{action}=E\cdot V_{action, street}\] where action $= raise, call, fold$, street $= 1, 2, 3, 4$.
+	\\The expression of $E$ is $E=<1, h, c, s, g>$. 1 is a constant padded for the bias,$h$ is the hand strength, $c$ is the bet difference, $s$ is the remaining stack difference and $g$ is the gain difference.
+	\\The expression of $V$ is $V_i = <v_b, v_h, v_c, v_o >$. $v_h$ is the weight of $h$,
+	representing how influential hand strength is to quality of action.
+	\item Using the evaluation function above, agent gets expected payoff for each action $E_{raise}$, $E_{call}$, $E_{fold}$. If agent has not raised for four times, it will choose the action with highest expected $E$ among raise, call and fold. If agent has already raised for four times, it will choose the action with higher expected $E$ among call and fold. 
+	\\To make the evaluation function estimate expected payoff more precisely, our agent adjusts vectors for actions based on the actual payoff it gets after finishing the whole round of game.
 \end{enumerate}
 
-\subsection{Evaluation function}
+\subsection{Hand Strength Evaluation Function}
 Generally speaking, the hand strength of the combination of hole cards and revealed community card is static. The evaluation function of hand strength is obtained by offline training and settled before the start of game. It is not affected by opponents’  behavior and will not be adjusted in the process of playing game.                       
 Hand strength evaluation function is a linear combination of all features appearing in the combination of hole cards and revealed community card(s). There are 18 features that our agent use to estimate hand strength. 
 \\All the 18 card features of 4 types are shown below.
 
+\begin{center}
+	\begin{tabular}{ |c|c|c|c|c|} 
+		\hline
+		 & Card feature & Value & Weight \\
+		\hline
+		 \multirow {2}{*}{hole card feature} & bigger value among two hole cards & $v_1$ & $w_1$\\ 
+		& difference between value of two cards & $v_2$ &$w_2$\\ 
+		\hline
+		\multirow{6}{*}{cards of one type}& pair & $v_3$ & $w_3$\\ 
+		& number of pairs & $v_4$ & $w_4$\\ 
+		& three of a kind & $v_5$ & $w_5$\\ 
+		& number of "three of a kind" & $v_6$ & $w_6$\\ 
+		& four of a hand & $v_7$ & $w_7$\\ 
+		& full house & $v_8$ & $w_8$\\ 
+		\hline
+		\multirow{6}{*}{suit}& two card of one suit  & $v_9$ & $w_9$\\ 
+		& number of "two card of one suit" & $v_{10}$ & $w_{10}$\\ 
+		& three card of one suit  & $v_{11}$ & $w_{11}$\\ 
+		& number of "three card of one suit"  & $v_{12}$ & $w_{12}$\\ 
+		& four card of one suit  & $v_{13}$ & $w_{13}$\\ 
+		& flush  & $v_{14}$ & $w_{14}$\\ 
+		\hline
+		\multirow{4}{*}{sequence}& two consecutive cards & $v_{15}$ & $w_{15}$\\ 
+		& three consecutive cards & $v_{16}$ & $w_{16}$\\ 
+		& four consecutive cards & $v_{17}$ & $w_{17}$\\ 
+		& straight & $v_{18}$ & $w_{18}$\\ 
+		\hline
+	\end{tabular}
+\end{center}
+In the table above, $fi$ represents the value of card feature $i$. $f_1$ and $f_2$ are scaled to a number between 0 and 1. $f_3$, $f_4$, …, $f_{18}$ are 1 when the feature appears in the combination of hole cards and revealed community card. They are 0 when the feature doesn’t appear. $v_i$ is the weight of $f_i$, representing how influential card feature $i$ is to hand strength.
+\\The hand strength evaluation function $H$ is a linear combination of those 18 card feature’s value: \[F=<f_1, f_2, f_3, ..., f_{18}> V_i=<v_1, v_2, v_3, ..., v_{18}>\]\[H(F, V_i)=F\cdot V_i=\sum_{1}^{18}fivi\] $i=1, 2, 3, 4$, representing the current street.
+\\Vectors $V_i, (i = 1, 2, 3, 4)$ for the four betting streets are obtained by offline training. 
+Before the training, Weight vector $V_i$ are all set to $<1, 1, …, 1>$. The agent is trained by playing with (random) player.
+\\The training process is shown below:
+\begin{enumerate}
+	\item At the beginning of each betting round, the agent finds all card features that appears in the combination of hole cards and community card revealed in this round. Value of card features $f_1, … f_{18}$ are set here. Then, the hand strength is calculated by the dot product of $V_i$ and $F$.
+	\item Hand strength, bet has put, money in stack and other information describe the current game state will be combined into a feature vector $E$. The estimated final reward of choosing the action a in street s under the condition of the game state being $E$ is the dot product of $E\cdot V_{a, s}$.  For $a$ in \verb|{‘raise’, ‘call’, ‘fold’}|, we compare their estimated final reward and choose the one with the highest possible reward.
+	\item At the end of the round, we trace back the action history. For every action $a$ in the history at time $t$, we compare its estimated reward and the final true reward. The weight is updated by adding $\Delta V_{a, s} = \mu P(R_{true} - R_{estimated})E_{a, s}$ , where $\mu$ is the learning factor, $P$ is the probability of reaching the final state from choosing $a$ at time $t$. 
+\end{enumerate}
 
 
-\subsection{Training method}
 
-\subsubsection{Offline training}
 
-\subsubsection{Online training}
-To enable our agent to learn from games that it have been played with the opponent, the weight for each feature in the evaluation function is adjusted to improve the accuracy of our evaluation. As mentioned in section 3.2, our evaluation function for each action calculate the expected reward of taking the action. Based on the result at the end of every round, the value of the weight vector, $\theta$ will be adjusted.
-\\At the first round, pre-hardcoded base weight is used in the evaluation function. The base weight was derived from our offline training with random player (?, not sure). Monte Carlo algorithm was used.
-\\At the end of each round, $\theta$ for each action will be updated inside \begin{verbatim}receive_round_result_messge() \end{verbatim}function. Stochastic gradient descent approach is used to update $\theta$.
+
+\subsection{Evaluation Function for expected return of actions}
+To enable our agent to learn from games that it have been played with the opponent, the weight for each feature in the evaluation function is adjusted to improve the accuracy of our evaluation. As mentioned in section 3.2, our evaluation function for each action calculate the expected reward of taking the action. Based on the result at the end of every round, the value of the weight vector, $\theta$ will be adjusted to reduce the difference between expected reward and true reward.
+\\At the very beginning when the is not input information from the game, hard-coded base weight is used in the evaluation function. The base weight of each feature was derived by  playing against itself. (how the value is derived)
+\\If the agent play with the same opponent for subsequent rounds, $\theta$ will be updated at the end of each round inside \verb|receive_round_result_message()|function. Stochastic gradient descent method is adopted to update $\theta$. The mathematic expression is \[\theta \leftarrow \theta - \frac{\alpha}{2} \nabla_\theta L\] where $\alpha$ denotes the learning rate and $L$ denotes the loss function. The smaller the value of $\alpha$ is, the slower the learning process takes place. A relatively small learning rate (value) is chosen for the agent, to ensure that the agent is learning while prevent it from learning too fast and not converge on the true reward. We defined a loss function $L$ that shows the difference between expected reward $E$ and actual reward $R$. The expression of loss function is $L=(R-E)^2$. (is the difference always larger than 1?)Note that instead of calculating the absolute value of the difference between expected reward and true reward, we take the square of the difference so that it will be more significant and the adjustment will be more sensitive to even minor differences. Since the true reward at each round is achieved by a series of actions, each action contributes a fraction of the prediction, a scaling factor $s$ was added to plot the fraction of the expected reward that is contributed by a single action. (the value of $s$ ?) Thus, the mathematic expression we used to adjust the value of $\theta$ for each action is \[\theta \leftarrow \theta -s \frac{\alpha}{2} \nabla_\theta L\] As mentioned in section 3.2, $E=\hat{Q(\phi;\theta)}$, substitute $E$ inside the expression and simply it, we get \[\theta \leftarrow \theta -s \frac{\alpha}{2} \nabla_\theta (R - \hat{Q(\phi;\theta)})^2\] \[\theta \leftarrow \theta -s \frac{\alpha}{2} (-2) (R - \hat{Q(\phi;\theta)}) \frac{d}{d\theta} Q(\phi;\theta)\]\[\theta \leftarrow \theta + s\alpha (R - \hat{Q}(\phi)) \phi\] This is the equation we used to update the value of $\theta$.
+\\To end up with a good estimate of e
 
 \section{Training Result and analysis}
 \subsection{Offline training result}
@@ -104,184 +166,6 @@ To enable our agent to learn from games that it have been played with the oppone
 \subsection{discussion}
 Our implementation has three main advantages. Firstly, the approach we used to solve this problem is intuitive and fits the characteristic of poker game. Instead of generating game tree and running minimax algorithm to solve the problem, we use decision tree. The restriction of minimax algorithm in imperfect information game is mentioned by several researchers. Decision tree, in the other hand, requires less space and simulate well people's behavior in real life. Secondly, we took a wide range of features into consideration which makes our evaluation more complete and precise. Thirdly, by using reinforcement learning, we adjust the weight of each feature promptly.
 \section{Conclusion}
-
-Print manuscripts two columns to a page, in the manner in which these
-instructions are printed. The exact dimensions for pages are:
-\begin{itemize}
-\item left and right margins: .75$''$
-\item column width: 3.375$''$
-\item gap between columns: .25$''$
-\item top margin---first page: 1.375$''$
-\item top margin---other pages: .75$''$
-\item bottom margin: 1.25$''$
-\item column height---first page: 6.625$''$
-\item column height---other pages: 9$''$
-\end{itemize}
-
-All measurements assume an 8-1/2$''$ $\times$ 11$''$ page size. For
-A4-size paper, use the given top and left margins, column width,
-height, and gap, and modify the bottom and right margins as necessary.
-
-\subsection{Format of Electronic Manuscript}
-
-For the production of the electronic manuscript, you must use Adobe's
-{\em Portable Document Format} (PDF). A PDF file can be generated, for
-instance, on Unix systems using {\tt ps2pdf} or on Windows systems
-using Adobe's Distiller. There is also a website with free software
-and conversion services: {\tt http://www.ps2pdf.com/}. For reasons of
-uniformity, use of Adobe's {\em Times Roman} font is strongly suggested. In
-\LaTeX2e{}, this is accomplished by putting
-\begin{quote} 
-\mbox{\tt $\backslash$usepackage\{times\}}
-\end{quote}
-in the preamble.\footnote{You may want also to use the package {\tt
-latexsym}, which defines all symbols known from the old \LaTeX{}
-version.}
-  
-Additionally, it is of utmost importance to specify the American {\bf
-letter} format (corresponding to 8-1/2$''$ $\times$ 11$''$) when
-formatting the paper. When working with {\tt dvips}, for instance, one
-should specify {\tt -t letter}.
-
-\subsection{Title and Author Information}
-
-Center the title on the entire width of the page in a 14-point bold
-font. The title should be capitalized using Title Case. Below it, center author name(s) in a 12-point bold font. On the following line(s) place the affiliations, each affiliation on its own line using a 12-point regular font. Matching between authors and affiliations can be done using superindices. Additionally, a comma-separated email addresses list using a 12-point regular font is also allowed. Credit to a
-sponsoring agency can appear on the first page as a footnote.
-
-\subsection{Text}
-
-The main body of the text immediately follows the abstract. Use
-10-point type in a clear, readable font with 1-point leading (10 on
-11).
-
-Indent when starting a new paragraph, except after major headings.
-
-\subsection{Headings and Sections}
-
-When necessary, headings should be used to separate major sections of
-your paper. (These instructions use many headings to demonstrate their
-appearance; your paper should have fewer headings.). All headings should be capitalized using Title Case.
-
-\subsubsection{Section Headings}
-
-Print section headings in 12-point bold type in the style shown in
-these instructions. Leave a blank space of approximately 10 points
-above and 4 points below section headings.  Number sections with
-arabic numerals.
-
-\subsubsection{Subsection Headings}
-
-Print subsection headings in 11-point bold type. Leave a blank space
-of approximately 8 points above and 3 points below subsection
-headings. Number subsections with the section number and the
-subsection number (in arabic numerals) separated by a
-period.
-
-\subsubsection{Subsubsection Headings}
-
-Print subsubsection headings in 10-point bold type. Leave a blank
-space of approximately 6 points above subsubsection headings. Do not
-number subsubsections.
-
-\subsubsection{Special Sections}
-
-You may include an unnumbered acknowledgments section, including
-acknowledgments of help from colleagues.
-
-Any appendices directly follow the text and look like sections, except
-that they are numbered with capital letters instead of arabic
-numerals.
-
-The references section is headed ``References,'' printed in the same
-style as a section heading but without a number. A sample list of
-references is given at the end of these instructions. Use a consistent
-format for references, such as that provided by Bib\TeX{}. The reference
-list should not include unpublished work.
-
-\subsection{Citations}
-
-Citations within the text should include the author's last name and
-the year of publication, for example~\cite{gottlob:nonmon}.  Append
-lowercase letters to the year in cases of ambiguity.  Treat multiple
-authors as in the following examples:~\cite{abelson-et-al:scheme}
-or~\cite{bgf:Lixto} (for more than two authors) and
-\cite{brachman-schmolze:kl-one} (for two authors).  If the author
-portion of a citation is obvious, omit it, e.g.,
-Nebel~\shortcite{nebel:jair-2000}.  Collapse multiple citations as
-follows:~\cite{gls:hypertrees,levesque:functional-foundations}.
-\nocite{abelson-et-al:scheme}
-\nocite{bgf:Lixto}
-\nocite{brachman-schmolze:kl-one}
-\nocite{gottlob:nonmon}
-\nocite{gls:hypertrees}
-\nocite{levesque:functional-foundations}
-\nocite{levesque:belief}
-\nocite{nebel:jair-2000}
-
-\subsection{Footnotes}
-
-Place footnotes at the bottom of the page in a 9-point font.  Refer to
-them with superscript numbers.\footnote{This is how your footnotes
-should appear.} Separate them from the text by a short
-line.\footnote{Note the line separating these footnotes from the
-text.} Avoid footnotes as much as possible; they interrupt the flow of
-the text.
-
-\section{Illustrations}
-
-Place all illustrations (figures, drawings, tables, and photographs)
-throughout the paper at the places where they are first discussed,
-rather than at the end of the paper. If placed at the bottom or top of
-a page, illustrations may run across both columns.
-
-Illustrations must be rendered electronically or scanned and placed
-directly in your document. All illustrations should be in black and
-white, as color illustrations may cause problems. Line weights should
-be 1/2-point or thicker. Avoid screens and superimposing type on
-patterns as these effects may not reproduce well.
-
-Number illustrations sequentially. Use references of the following
-form: Figure 1, Table 2, etc. Place illustration numbers and captions
-under illustrations. Leave a margin of 1/4-inch around the area
-covered by the illustration and caption.  Use 9-point type for
-captions, labels, and other text in illustrations.
-
-\section*{Acknowledgments}
-
-The preparation of these instructions and the \LaTeX{} and Bib\TeX{}
-files that implement them was supported by Schlumberger Palo Alto
-Research, AT\&T Bell Laboratories, and Morgan Kaufmann Publishers.
-Preparation of the Microsoft Word file was supported by IJCAI.  An
-early version of this document was created by Shirley Jowell and Peter
-F. Patel-Schneider.  It was subsequently modified by Jennifer
-Ballentine and Thomas Dean, Bernhard Nebel, and Daniel Pagenstecher.
-These instructions are the same as the ones for IJCAI--05, prepared by
-Kurt Steinkraus, Massachusetts Institute of Technology, Computer
-Science and Artificial Intelligence Lab.
-
-\appendix
-
-\section{\LaTeX{} and Word Style Files}\label{stylefiles}
-
-The \LaTeX{} and Word style files are available on the IJCAI--18
-website, {\tt http://www.ijcai-18.org/}.
-These style files implement the formatting instructions in this
-document.
-
-The \LaTeX{} files are {\tt ijcai18.sty} and {\tt ijcai18.tex}, and
-the Bib\TeX{} files are {\tt named.bst} and {\tt ijcai18.bib}. The
-\LaTeX{} style file is for version 2e of \LaTeX{}, and the Bib\TeX{}
-style file is for version 0.99c of Bib\TeX{} ({\em not} version
-0.98i). The {\tt ijcai18.sty} file is the same as the {\tt
-ijcai07.sty} file used for IJCAI--07.
-
-The Microsoft Word style file consists of a single file, {\tt
-ijcai18.doc}. This template is the same as the one used for
-IJCAI--07.
-
-These Microsoft Word and \LaTeX{} files contain the source of the
-present document and may serve as a formatting sample.  
 
 
 %% The file named.bst is a bibliography style file for BibTeX 0.99c
