@@ -10,8 +10,7 @@ class CallPlayer(BasePokerPlayer):
             action = i["action"]
             return action  # action returned here is sent to the poker engine
     action = valid_actions[1]["action"]
-    return action
-    # action returned here is sent to the poker engine
+    return action # action returned here is sent to the poker engine
 
   def receive_game_start_message(self, game_info):
     pass

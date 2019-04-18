@@ -35,6 +35,8 @@ class RTPlayer(BasePokerPlayer):
     # theta is the weight vector that needs updated
     self.nParams = 6
     self.theta = np.random.rand(self.nParams)
+    self.accumulate = 0
+    self.results = []
 
     # Input:
     #   theta: parameter for current model Qhat
@@ -108,7 +110,7 @@ class RTPlayer(BasePokerPlayer):
         # 2. next_action is 'raise' but raise num alr 4, cannot raise anymore
         # 3. next_action not in valid_action (there are only two kind of valid_action set: with/withou 'raise')
         # if any of this is satisfied, next_action will be randomly chosen from remain_actions
-        if (len(remain_actions) is 1):
+        if len(remain_actions) is 1:
             # only remain 1 action, choose this by default
             next_action = remain_actions[0]
         else :
@@ -140,9 +142,9 @@ class RTPlayer(BasePokerPlayer):
     self.small_blind_amount = game_info['rule']['small_blind_amount']
 
     if game_info['seats'][0]['uuid'] is self.uuid:
-        self.seat_id = 0;
+        self.seat_id = 0
     else:
-        self.seat_id = 1;
+        self.seat_id = 1
 
     assert(self.seat_id in [0,1])
 
@@ -155,7 +157,7 @@ class RTPlayer(BasePokerPlayer):
     pass
 
   def receive_street_start_message(self, street, round_state):
-    self.pp.pprint("street: " + street)
+    # self.pp.pprint("street: " + street)
     pass
 
   def receive_game_update_message(self, action, round_state):
@@ -211,29 +213,33 @@ class RTPlayer(BasePokerPlayer):
                 qCALL = self.evalModel(self.theta, phiRAISE)
                 qFOLD = self.evalModel(self.theta, phiFOLD)
 
+                sig_raise = self.sigmoid(qRAISE)
+                sig_call = self.sigmoid(qCALL)
+                sig_fold = self.sigmoid(qFOLD)
+                sum_sig = sig_raise + sig_call + sig_fold
+
+
                 if act['action'] is 'raise':
-                    prob = qRAISE / (qRAISE + qCALL + qFOLD)
+                    prob = sig_raise / sum_sig
                     self.theta += self.alpha * (curr_lvl_reward[1-self.seat_id] - qRAISE) * phiRAISE
                     curr_lvl_reward[1 - self.seat_id] *= prob
                 elif act['action'] is 'call':
-                    prob = qCALL / (qRAISE + qCALL + qFOLD)
+                    prob = sig_call / sum_sig
                     self.theta += self.alpha * (curr_lvl_reward[1-self.seat_id] - qCALL) * phiCALL
                     curr_lvl_reward[1 - self.seat_id] *= prob
                 else:
-                    prob = qFOLD / (qRAISE + qCALL + qFOLD)
+                    prob = sig_fold / sum_sig
                     self.theta += self.alpha * (curr_lvl_reward[1-self.seat_id] - qFOLD) * phiFOLD
                     curr_lvl_reward[1 - self.seat_id] *= prob
 
+    self.accumulate += curr_lvl_reward[self.seat_id]
+    self.results.append(self.accumulate)
 
   def isMe(self, uuid):
       return uuid is self.uuid
 
-    #TODO (for ysh)
-  def sigmoid(self, my_stack, opponent_stack):
-      if my_stack > opponent_stack:
-          return my_stack/opponent_stack - 1
-      else:
-          return 1 - my_stack/opponent_stack
+  def sigmoid(self, x):
+      return float(1) / (1 + np.exp(-x))
 
     # feature range: 0-1
     # nParams = 6
@@ -241,7 +247,7 @@ class RTPlayer(BasePokerPlayer):
     # state
     #   (int within range 0-1) card_strength: my estimated hand strength
     #   isMe: boolean true if the player is me
-    #   mystack
+    #   my stack
     #   opponent stack
     # action
     #   action: Fold:0, Call: 0.5, Raise: 1
@@ -256,7 +262,7 @@ class RTPlayer(BasePokerPlayer):
                      1 if curr_action is 'raise' else 0.5 if curr_action is 'call' else 0,
                      1 if isMe else -1,
                      1 if isMe and (curr_action is 'raise') else 0,
-                     self.sigmoid(mystack, opponent_stack),
+                     self.sigmoid(mystack - opponent_stack),
                      ])
 
     # Inputs:
