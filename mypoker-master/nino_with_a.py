@@ -40,7 +40,7 @@ class RTPlayer(BasePokerPlayer):
         #update every street
         self.feature_vector = np.ones(self.nParams + 1)
         self.q_suggest = {'raise': 0, 'call': 0, 'fold': 0}
-        self.street_idx = 0;
+        self.street_idx = 0
 
         self.call_static_prob = 0.5
         self.raise_static_prob = 0.4
@@ -61,7 +61,6 @@ class RTPlayer(BasePokerPlayer):
         ## a list to keep record of all results
         self.accumulate = 0
         self.results = []
-
 
     def declare_action(self, valid_actions, hole_card, round_state):
         # check if raise 4 times alr, cannot raise any more
@@ -94,7 +93,8 @@ class RTPlayer(BasePokerPlayer):
         my_total_gain = self.total_gain[my_id]
 
         # get the feature vector for every possible action
-        feature_vec = self.phi(card_strength, my_stack, opp_stack, my_bet, opp_bet, my_total_gain)
+        isMe = True
+        feature_vec = self.phi(card_strength, isMe, my_stack, opp_stack, my_bet, opp_bet, my_total_gain)
         self.feature_vector = feature_vec
 
         # value for taking different action
@@ -107,7 +107,7 @@ class RTPlayer(BasePokerPlayer):
         self.q_suggest['call'] = q_call
         self.q_suggest['fold'] = q_fold
 
-        #choose action
+        # choose action
         next_action, probability = self.action_select_helper(valid_actions, flag)
         # print('next action: %s' % next_action)
         expected_reward = self.q_suggest[next_action]
@@ -153,13 +153,14 @@ class RTPlayer(BasePokerPlayer):
         pass
 
     def receive_round_result_message(self, winners, hand_info, round_state):
-        self.pp.pprint(round_state)
         # start training at the end of every round
         self.stack_record = [[self.stack_record[0][1], round_state['seats'][0]['stack']], \
                              [self.stack_record[1][1], round_state['seats'][1]['stack']]]
 
-        true_reward = [self.stack_record[0][1] - self.stack_record[0][0], \
-                       self.stack_record[1][1] - self.stack_record[1][0]][self.seat_id]
+        my_id = self.seat_id
+        oppo_id = 1 - self.seat_id
+        true_reward = [self.stack_record[0][1] - self.stack_record[0][0],\
+                       self.stack_record[1][1] - self.stack_record[1][0]][my_id]
 
         # backtrack every step
         self.estimated_step_rewards = self.estimated_step_rewards[::-1]
@@ -182,6 +183,47 @@ class RTPlayer(BasePokerPlayer):
 
         self.accumulate += true_reward
         self.results.append(self.accumulate)
+
+        # learn from opponent's behaviour
+        # using the same method to learn
+        # backward propagation
+        # read feature
+        opp_id = 1 - self.seat_id
+        opp_hole_card = []
+        card_feature = self.cfvc.fetch_feature(Card_util.gen_cards(self.hole_card),
+                                               Card_util.gen_cards(round_state['community_card']))
+        card_feature = self.get_transferred_vec(card_feature)
+        card_strength = np.dot(card_feature, self.thf.get_strength(self.street_idx))
+        my_stack = round_state['seats'][my_id]['stack']
+        opp_stack = round_state['seats'][opp_id]['stack']
+        my_bet = self.stack_record[my_id][1] - my_stack
+        opp_bet = self.stack_record[opp_id][1] - opp_stack
+        my_total_gain = self.total_gain[my_id]
+
+        # get the feature vector for every possible action
+        isMe = False
+        feature_vec = self.phi(card_strength, isMe, my_stack, opp_stack, my_bet, opp_bet, my_total_gain)
+        self.feature_vector = feature_vec
+
+        # value for taking different action
+        q_raise = np.dot(self.step_theta[self.street_idx]['raise'], feature_vec)
+        q_call = np.dot(self.step_theta[self.street_idx]['call'], feature_vec)
+        q_fold = np.dot(self.step_theta[self.street_idx]['fold'], feature_vec)
+        # print('raise %10.6f, call %10.6f, fold %10.6f' % (q_raise, q_call, q_fold))
+
+        self.q_suggest['raise'] = q_raise
+        self.q_suggest['call'] = q_call
+        self.q_suggest['fold'] = q_fold
+
+        # choose action
+        next_action, probability = self.action_select_helper(valid_actions, flag)
+        # print('next action: %s' % next_action)
+        expected_reward = self.q_suggest[next_action]
+        self.estimated_step_rewards.append([next_action, expected_reward, probability, self.street_idx, self.feature_vector])
+        return next_action # action returned here is sent to the poker engine
+
+    def compare_state_action_pair(self):
+
 
     def action_select_helper(self, valid_actions, flag):
         valid_acts = list(map(lambda x: x['action'], valid_actions))
@@ -208,12 +250,13 @@ class RTPlayer(BasePokerPlayer):
         else:
             return max_action, 0.5
 
+    @ staticmethod
     def theta_single_step(self, length):
         return {'raise': np.zeros(length),
                 'call': np.zeros(length),
                 'fold': np.zeros(length)}
 
-    def phi(self, hand_strength, my_stack, opp_stack, my_bet, opp_bet, my_total_gain):
+    def phi(self, hand_strength, isMe, my_stack, opp_stack, my_bet, opp_bet, my_total_gain):
         return np.array([
             1,
             hand_strength,
@@ -221,8 +264,9 @@ class RTPlayer(BasePokerPlayer):
             (my_bet - opp_bet) / float(10),
             self.diff_normal(my_stack, opp_stack),
             self.diff_normal(my_total_gain, - my_total_gain)
-        ])
+        ]) * (1 if isMe else -1)
 
+    @ staticmethod
     def sigmoid(self, x):
         return float(1) / (1 + np.exp(-x))
 

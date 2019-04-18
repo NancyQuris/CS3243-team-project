@@ -19,8 +19,9 @@ for i in range(10):
 
     game_result = start_poker(config, verbose=0)
     pp = pprint.PrettyPrinter(indent=2)
-    pp.pprint(game_result)
-    pp.pprint(rtplayer.step_theta)
+
+  #  pp.pprint(game_result)
+ #   pp.pprint(rtplayer.step_theta)
 
 
 y_val_list = rtplayer.get_result()

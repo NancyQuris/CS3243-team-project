@@ -21,6 +21,7 @@ class RTPlayer(BasePokerPlayer):
         self.nParams = 4
         # self.learn_factor = [0.01, 0.01, 0.01, 0.01]
         self.learn_factor = 0
+        self.accumulate = 0
 
         ## update every game
         self.initial_stack = 0
@@ -188,7 +189,10 @@ class RTPlayer(BasePokerPlayer):
             self.step_theta[step_idx][action] = np.add(self.step_theta[step_idx][action], delta)
         # self.pp.pprint(self.step_theta)
 
-        self.results.append(true_reward)
+        self.accumulate += true_reward
+        self.results.append(self.accumulate)
+
+       # self.results.append(true_reward)
 
     def action_select_helper(self, valid_actions, flag):
         valid_acts = list(map(lambda x: x['action'], valid_actions))
