@@ -121,9 +121,9 @@ class RTPlayer(BasePokerPlayer):
         self.small_blind_amount = game_info['rule']['small_blind_amount']
 
         if game_info['seats'][0]['uuid'] is self.uuid:
-            self.seat_id = 0;
+            self.seat_id = 0
         else:
-            self.seat_id = 1;
+            self.seat_id = 1
 
         self.stack_record = [[self.initial_stack] * 2, [self.initial_stack] * 2]
 
@@ -189,7 +189,7 @@ class RTPlayer(BasePokerPlayer):
         if not flag and 'raise' in valid_acts:
             valid_acts.remove('raise')
 
-        action_to_choose = { x: self.q_suggest[x] for x in valid_acts }
+        action_to_choose = {x: self.q_suggest[x] for x in valid_acts}
         num_valid = len(valid_acts)
         assert(num_valid > 0)
         max_action = max(action_to_choose, key=action_to_choose.get)

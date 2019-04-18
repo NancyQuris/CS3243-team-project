@@ -3,12 +3,21 @@ class CardFeatureVectorCompute:
 
     def fetch_feature(self, hole, community):
         cards = hole + community
-        assert(len(hole) == 2)
+        assert(len(hole) is 2)
         feature_vector = self.hole_eval(hole)
         feature_vector += self.value_count(cards)
         feature_vector += self.suit_count(cards)
         feature_vector += self.seq_count(cards)
         return feature_vector
+
+    def fetch_feature_2(self, community):
+        cards = community
+        feature_vector = [0, 0]
+        feature_vector += self.value_count(cards)
+        feature_vector += self.suit_count(cards)
+        feature_vector += self.seq_count(cards)
+        return feature_vector
+
 
     def hole_eval(self, cards):
         max_val = max(cards[0].rank, cards[0].rank)

@@ -38,8 +38,9 @@ class RandomPlayer(BasePokerPlayer):
     pass
 
   def receive_round_result_message(self, winners, hand_info, round_state):
-    print("NINONONONONONONONO")
-    self.pp.pprint(hand_info)
+    #print("NINONONONONONONONO")
+    #self.pp.pprint(hand_info)
+    #self.pp.pprint(round_state)
     pass
 
 def setup_ai():
