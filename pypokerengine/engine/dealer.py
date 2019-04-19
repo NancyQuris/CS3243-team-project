@@ -17,7 +17,7 @@ class Dealer:
     self.uuid_list = self.__generate_uuid_list()
     self.message_handler = MessageHandler()
     self.message_summarizer = MessageSummarizer(verbose=0)
-    self.table = Tabfle()
+    self.table = Table()
     self.blind_structure = {}
 
   def register_player(self, player_name, algorithm):
