@@ -1,5 +1,6 @@
 from pypokerengine.api.game import setup_config, start_poker
 from raise_player import RaisedPlayer
+from call_player import CallPlayer
 from randomplayer import RandomPlayer
 from nino_with_c import RTPlayer
 import pprint

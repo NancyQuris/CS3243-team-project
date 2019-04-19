@@ -18,7 +18,6 @@ class RTPlayer(BasePokerPlayer):
         self.street_map = {'preflop': 0, 'flop': 1, 'river': 2, 'turn': 3, 'showdown': 4}
         self.rev_street_map = {0: 'preflop', 1: 'flop', 2: 'river', 3: 'turn', 'showdown': 4}
         self.nParams = 8
-        # self.learn_factor = [0.01, 0.01, 0.01, 0.01]
         self.learn_factor = 0.01
         self.opp_factor = 0.2
         self.scale_factor = 0.5
@@ -84,8 +83,6 @@ class RTPlayer(BasePokerPlayer):
         opp_id = 1 - my_id
         card_feature = self.cfvc.fetch_feature_essential(Card_util.gen_cards(self.hole_card),
                                                          Card_util.gen_cards(round_state['community_card']))
-        # card_feature = self.get_transferred_vec(card_feature)
-        # card_strength = np.dot(card_feature, self.thf.get_strength(self.street_idx))
         my_stack = round_state['seats'][my_id]['stack']
         opp_stack = round_state['seats'][opp_id]['stack']
         my_bet = self.stack_record[my_id][1] - my_stack
@@ -101,7 +98,6 @@ class RTPlayer(BasePokerPlayer):
         q_raise = np.dot(self.step_theta[self.street_idx]['raise'], feature_vec)
         q_call = np.dot(self.step_theta[self.street_idx]['call'], feature_vec)
         q_fold = np.dot(self.step_theta[self.street_idx]['fold'], feature_vec)
-        # print('raise %10.6f, call %10.6f, fold %10.6f' % (q_raise, q_call, q_fold))
 
         self.q_suggest['raise'] = q_raise
         self.q_suggest['call'] = q_call
@@ -109,10 +105,8 @@ class RTPlayer(BasePokerPlayer):
 
         # choose action
         next_action, probability = self.action_select_helper(valid_actions, flag)
-        # print('next action: %s' % next_action)
         expected_reward = self.q_suggest[next_action]
         self.estimated_step_rewards.append([next_action, expected_reward, probability, self.street_idx, self.feature_vector])
-        # print(next_action)
         return next_action  # action returned here is sent to the poker engine
 
     def receive_game_start_message(self, game_info):
@@ -121,7 +115,6 @@ class RTPlayer(BasePokerPlayer):
         self.max_round = game_info['rule']['max_round']
         self.small_blind_amount = game_info['rule']['small_blind_amount']
         self.game_count = self.game_count + 1
-        # self.opp_factor = 0.2 / self.game_count
 
         if game_info['seats'][0]['uuid'] == self.uuid:
             self.seat_id = 0
@@ -174,8 +167,6 @@ class RTPlayer(BasePokerPlayer):
                        self.stack_record[1][1] - self.stack_record[1][0]]
         my_last_stack = self.stack_record[my_id][0]
         opp_last_stack = self.stack_record[opp_id][0]
-        my_reward = true_reward[my_id]
-        opp_reward = true_reward[opp_id]
 
         # backtrack every step for myself
         self.estimated_step_rewards = self.estimated_step_rewards[::-1]
@@ -209,7 +200,6 @@ class RTPlayer(BasePokerPlayer):
                 if curr_street not in round_state['action_histories'].keys():
                     continue
 
-                # self.pp.pprint(round_state)
                 street_bet = 0
                 my_street_bet = 0
                 opp_street_community_card = self.community[curr_str_idx]
@@ -223,8 +213,6 @@ class RTPlayer(BasePokerPlayer):
                         if act in {'call', 'raise', 'fold'}:
                             opp_card_feature = self.cfvc.fetch_feature_essential(Card_util.gen_cards(opp_hole_card),
                                                                        Card_util.gen_cards(opp_street_community_card))
-                            # opp_card_feature = self.get_transferred_vec(opp_card_feature)
-                            # opp_card_strength = np.dot(opp_card_feature, self.thf.get_strength(curr_str_idx))
                             opp_stack = opp_last_stack - bet_accumulate
                             my_stack = my_last_stack - my_bet_accumulate
                             opp_total_gain = self.total_gain[opp_id]
