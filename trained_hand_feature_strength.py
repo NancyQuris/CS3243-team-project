@@ -29,14 +29,19 @@ class Trained_hand_feature():
         result = np.true_divide(result, len(self.streets))
         return result
 
-    
+    def get_street_theta_essential(self, street_idx):
+        str = self.streets[street_idx]
+        w_val_comb = str[3] + str[4] + str[5] + str[6] + str[7]
+        w_suit_comb = str[9] + str[10] + str[11] + str[12] + str[13]
+        w_seq_comb = str[15] + str[16] + str[17]
+        return [str[0], str[1], str[2], w_val_comb, str[8], w_suit_comb, str[14], w_seq_comb]
 
-    def get_copy_for_train(self):
-        copy = []
-        for i in range(len(self.streets)):
-            d = dict()
-            d['raise'] = np.copy(self.streets[i])
-            d['call'] = np.copy(self.streets[i])
-            d['fold'] = np.multiply(np.copy([self.streets[i]]), -1)
-            copy.append(d)
-        return copy
+    def get_strength_essential_initial(self):
+        result = []
+        for i in range(4):
+            step_theta = dict()
+            step_theta['raise'] = np.array([0] + self.get_street_theta_essential(i))
+            step_theta['call'] = np.array([0] + self.get_street_theta_essential(i))
+            step_theta['fold'] = np.zeros(9)
+            result.append(step_theta)
+        return result

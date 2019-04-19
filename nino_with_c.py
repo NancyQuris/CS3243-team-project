@@ -51,15 +51,12 @@ class RTPlayer(BasePokerPlayer):
 
         #TODO: how to initialize theta
         # Trained_other_feature().get_weights()
-        self.step_theta = [self.theta_single_step(self.nParams + 1),\
-             self.theta_single_step(self.nParams + 1),\
-             self.theta_single_step(self.nParams + 1),\
-             self.theta_single_step(self.nParams + 1)]
         # helper to compute the strength
         self.cfvc = CardFeatureVectorCompute()
         self.thf = Trained_hand_feature()
         self.eps = 0
         self.game_count = 0
+        self.step_theta = self.thf.get_strength_essential_initial()
 
         ## a list to keep record of all results
         self.accumulate = 0
@@ -138,11 +135,11 @@ class RTPlayer(BasePokerPlayer):
         # self.learn_factor = 0.01
         # self.learn_factor = np.floor(10 / self.game_count) / float(100)
         if self.last_game_result >= 1.4 * self.initial_stack:
-           self.learn_factor = 0
+            self.learn_factor = 0
         elif self.last_game_result >= 1.2 * self.initial_stack:
             self.learn_factor = 0.005
         else:
-           self.learn_factor = 0.01
+            self.learn_factor = 0.01
 
     def receive_round_start_message(self, round_count, hole_card, seats):
         self.estimated_step_rewards = []
