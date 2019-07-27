@@ -1,6 +1,11 @@
-## Term Project
+# AI poker player
 
-### Set up environment
+## project description
+An AI poker player agent that plays Limit Texas Hold’em was built for this project. The implementation adopted reniforcement learning to enable the agent to act based on hand strength and opponent behaviour. The detailed implementation, performance and discussion could be found in the [project report](https://github.com/NancyQuris/CS3243-team-project/blob/master/project%20report.pdf). 
+
+This project is one of the module assignments for [CS3243: Introduction to Artificial Intelligence](https://nusmods.com/modules/CS3243/introduction-to-artificial-intelligence).
+
+## environment setup
 using the conda or pyenv
 
 - conda create -n cs3243 python=2.7
